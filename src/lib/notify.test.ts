@@ -2,6 +2,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { showReminder } from "./notify";
 
+const nativePlatform = vi.hoisted(() => ({ value: false }));
+vi.mock("@capacitor/core", () => ({
+  Capacitor: { isNativePlatform: () => nativePlatform.value },
+}));
+
 const PageNotification = vi.fn();
 
 function setup(permission: NotificationPermission, reg: unknown) {
@@ -14,6 +19,7 @@ function setup(permission: NotificationPermission, reg: unknown) {
 }
 
 afterEach(() => {
+  nativePlatform.value = false;
   vi.unstubAllGlobals();
   PageNotification.mockReset();
 });
@@ -46,6 +52,13 @@ describe("showReminder", () => {
     setup("denied", { active: {}, showNotification });
     expect(await showReminder("Time to look away", "x")).toBe("skipped");
     expect(showNotification).not.toHaveBeenCalled();
+    expect(PageNotification).not.toHaveBeenCalled();
+  });
+
+  it("uses scheduled native reminders instead of browser notifications in Capacitor", async () => {
+    nativePlatform.value = true;
+    setup("granted", { active: {}, showNotification: vi.fn() });
+    expect(await showReminder("Time to look away", "x")).toBe("native");
     expect(PageNotification).not.toHaveBeenCalled();
   });
 });

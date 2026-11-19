@@ -34,6 +34,13 @@ import {
 } from "@/lib/eye-timer";
 import { DEFAULT_KIDS, isTimeUp, type KidsSettings } from "@/lib/kids-mode";
 import { showReminder } from "@/lib/notify";
+import {
+  checkNativeReminderPermission,
+  isNativePlatform,
+  requestNativeReminderPermission,
+  syncNativeReminders,
+  type ReminderPermission,
+} from "@/lib/native-reminders";
 
 const SETTINGS_KEY = "lookaway:settings";
 const STATS_KEY = "lookaway:stats";
@@ -64,6 +71,9 @@ export function useEyeTimer() {
   const [override, setOverride] = useState(false);
   const lastBlinkRef = useRef<number>(Date.now());
   const [kids, setKids] = useState<KidsSettings>(DEFAULT_KIDS);
+  const [notificationPermission, setNotificationPermission] =
+    useState<ReminderPermission>("default");
+  const notificationRequestInFlight = useRef(false);
   const lastBeatRef = useRef<number>(Date.now());
   // Guard: never save the timer until the saved one has been restored.
   const [restored, setRestored] = useState(false);
@@ -97,7 +107,11 @@ export function useEyeTimer() {
     if (!restored) return;
     try {
       if (state.phase === "idle") localStorage.removeItem(TIMER_KEY);
-      else localStorage.setItem(TIMER_KEY, JSON.stringify(serializeTimer(state, Date.now(), autoPaused)));
+      else
+        localStorage.setItem(
+          TIMER_KEY,
+          JSON.stringify(serializeTimer(state, Date.now(), autoPaused)),
+        );
     } catch {
       /* storage full or blocked; timer still works in memory */
     }
@@ -109,7 +123,10 @@ export function useEyeTimer() {
     if (!restored || state.phase === "idle") return;
     const save = () => {
       try {
-        localStorage.setItem(TIMER_KEY, JSON.stringify(serializeTimer(state, Date.now(), autoPaused)));
+        localStorage.setItem(
+          TIMER_KEY,
+          JSON.stringify(serializeTimer(state, Date.now(), autoPaused)),
+        );
       } catch {
         /* ignore */
       }
@@ -151,6 +168,43 @@ export function useEyeTimer() {
 
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
+  const stateRef = useRef(state);
+  stateRef.current = state;
+  const overrideRef = useRef(override);
+  overrideRef.current = override;
+  const nativePlatform = isNativePlatform();
+
+  const synchronizeNativeReminders = useCallback(async () => {
+    if (!nativePlatform) return;
+    try {
+      const result = await syncNativeReminders(
+        stateRef.current,
+        settingsRef.current,
+        Date.now(),
+        overrideRef.current,
+      );
+      if (result) setNotificationPermission(result.permission);
+    } catch (error) {
+      console.error("Could not reconcile native eye-break reminders.", error);
+      toast.error("Android reminders could not be updated. Reopen Lookaway to try again.");
+    }
+  }, [nativePlatform]);
+
+  useEffect(() => {
+    if (!restored || !nativePlatform) return;
+    void synchronizeNativeReminders();
+  }, [restored, state, settings, override, nativePlatform, synchronizeNativeReminders]);
+
+  useEffect(() => {
+    if (!restored || !nativePlatform) return;
+    const onVisibilityChange = () => {
+      if (document.visibilityState !== "visible") return;
+      setNow(Date.now());
+      void synchronizeNativeReminders();
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, [restored, nativePlatform, synchronizeNativeReminders]);
 
   // Heartbeat: fast while counting down, slow otherwise (to notice working hours changing).
   const paused = isPaused(state);
@@ -186,10 +240,15 @@ export function useEyeTimer() {
     if (r.event === "break-start") {
       const late = overdueMs(state, now);
       if (late > MISSED_BREAK_GRACE_MS) {
-        toast(`Welcome back! A break was due ${Math.round(late / 60_000)} min ago while the app was closed — let's take it now.`);
+        toast(
+          `Welcome back! A break was due ${Math.round(late / 60_000)} min ago while the app was closed — let's take it now.`,
+        );
       }
       if (s.sound) playSound(s.soundKind, s.volume, "start");
-      notify("Time to look away", `Look at something 20 feet (6 m) away for ${s.breakSeconds} seconds.`);
+      notify(
+        "Time to look away",
+        `Look at something 20 feet (6 m) away for ${s.breakSeconds} seconds.`,
+      );
     } else {
       bumpStats("breaks");
       if (s.sound) playSound(s.soundKind, s.volume, "end");
@@ -234,8 +293,10 @@ export function useEyeTimer() {
   const remaining = remainingMs(state, now);
   useEffect(() => {
     if (state.phase === "idle") document.title = "Lookaway · 20-20-20 eye breaks";
-    else if (state.phase === "break") document.title = `👀 Look away · ${Math.ceil(remaining / 1000)}s`;
-    else document.title = `${formatClock(remaining)}${isPaused(state) ? " (paused)" : ""} · Lookaway`;
+    else if (state.phase === "break")
+      document.title = `👀 Look away · ${Math.ceil(remaining / 1000)}s`;
+    else
+      document.title = `${formatClock(remaining)}${isPaused(state) ? " (paused)" : ""} · Lookaway`;
   }, [state, remaining]);
 
   // Streaks.
@@ -245,19 +306,46 @@ export function useEyeTimer() {
   useEffect(() => {
     if (timeUp && state.phase !== "idle") setState(IDLE);
   }, [timeUp, state.phase]);
-  const insights = useMemo(() => weekInsights(allStats, parseDayKey(todayKey)), [allStats, todayKey]);
+  const insights = useMemo(
+    () => weekInsights(allStats, parseDayKey(todayKey)),
+    [allStats, todayKey],
+  );
   const { workHoursEnabled, workDays } = settings;
   const { streak, week } = useMemo(() => {
     const today = parseDayKey(todayKey);
     const isWork = isWorkDayFn({ ...DEFAULT_SETTINGS, workHoursEnabled, workDays });
-    return { streak: computeStreak(allStats, today, isWork), week: lastDays(allStats, today, 7, isWork) };
+    return {
+      streak: computeStreak(allStats, today, isWork),
+      week: lastDays(allStats, today, 7, isWork),
+    };
   }, [allStats, todayKey, workHoursEnabled, workDays]);
 
   const askNotifications = useCallback(async () => {
+    if (nativePlatform) {
+      try {
+        const current = await checkNativeReminderPermission();
+        setNotificationPermission(current);
+        if (current !== "default" || notificationRequestInFlight.current) return current;
+        notificationRequestInFlight.current = true;
+        try {
+          const requested = await requestNativeReminderPermission();
+          setNotificationPermission(requested);
+          if (requested === "granted") await synchronizeNativeReminders();
+          return requested;
+        } finally {
+          notificationRequestInFlight.current = false;
+        }
+      } catch (error) {
+        console.error("Could not request native notification permission.", error);
+        setNotificationPermission("error");
+        toast.error("Android notification access could not be checked. Try again.");
+        return "error";
+      }
+    }
     if (typeof Notification === "undefined") return "unsupported" as const;
     if (Notification.permission === "default") return Notification.requestPermission();
     return Notification.permission;
-  }, []);
+  }, [nativePlatform, synchronizeNativeReminders]);
 
   const outsideNow = () => !isWithinWorkHours(settingsRef.current, new Date());
 
@@ -335,5 +423,7 @@ export function useEyeTimer() {
     blinkCue,
     actions,
     askNotifications,
+    nativePlatform,
+    notificationPermission,
   };
 }

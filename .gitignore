@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 .output
+.native-build/
+native-web/
 .vinxi
 .tanstack/**
 .nitro

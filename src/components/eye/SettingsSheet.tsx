@@ -2,18 +2,27 @@ import { ChevronRight, Clock, Volume2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Label } from "@/components/ui/label";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { workHoursSummary, type EyeSettings } from "@/lib/eye-timer";
 import { SOUNDS } from "@/lib/sounds";
+import type { ReminderPermission } from "@/lib/native-reminders";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   settings: EyeSettings;
   onChange: (patch: Partial<EyeSettings>) => void;
-  askNotifications: () => Promise<NotificationPermission | "unsupported">;
+  askNotifications: () => Promise<ReminderPermission>;
+  nativePlatform: boolean;
+  notificationPermission: ReminderPermission;
   onOpenWorkHours: () => void;
   onOpenSound: () => void;
 }
@@ -21,13 +30,25 @@ interface Props {
 function Group({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h3 className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-primary">{title}</h3>
+      <h3 className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+        {title}
+      </h3>
       {children}
     </section>
   );
 }
 
-function Row({ id, title, hint, children }: { id: string; title: string; hint: string; children: React.ReactNode }) {
+function Row({
+  id,
+  title,
+  hint,
+  children,
+}: {
+  id: string;
+  title: string;
+  hint: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex items-center justify-between gap-4 py-3.5">
       <div>
@@ -106,6 +127,8 @@ export function SettingsSheet({
   settings,
   onChange,
   askNotifications,
+  nativePlatform,
+  notificationPermission,
   onOpenWorkHours,
   onOpenSound,
 }: Props) {
@@ -116,7 +139,9 @@ export function SettingsSheet({
       <SheetContent className="w-full max-w-md overflow-y-auto bg-background sm:max-w-md">
         <SheetHeader>
           <SheetTitle className="font-display text-2xl font-normal">Your rhythm</SheetTitle>
-          <SheetDescription>The defaults follow the 20-20-20 rule. Adjust only if you need to.</SheetDescription>
+          <SheetDescription>
+            The defaults follow the 20-20-20 rule. Adjust only if you need to.
+          </SheetDescription>
         </SheetHeader>
 
         <div className="mt-6 space-y-8 pb-6">
@@ -162,7 +187,15 @@ export function SettingsSheet({
 
           <Group title="Reminders">
             <div className="divide-y rounded-2xl border bg-card px-4">
-              <Row id="notify" title="Pop-up alerts" hint="Get reminded even when this tab is hidden">
+              <Row
+                id="notify"
+                title="Pop-up alerts"
+                hint={
+                  nativePlatform
+                    ? "Allow Android notifications for reminders while Lookaway is closed."
+                    : "Get reminded even when this tab is hidden"
+                }
+              >
                 <Switch
                   id="notify"
                   checked={settings.notifications}
@@ -170,16 +203,46 @@ export function SettingsSheet({
                     onChange({ notifications: v });
                     if (v) {
                       const p = await askNotifications();
-                      if (p === "denied") toast.error("Alerts are blocked in your browser settings.");
+                      if (p === "denied") {
+                        toast.error(
+                          nativePlatform
+                            ? "Notifications are blocked. Enable them in Android Settings for Lookaway."
+                            : "Alerts are blocked in your browser settings.",
+                        );
+                      }
                       if (p === "unsupported") toast("This browser doesn't support pop-up alerts.");
+                      if (p === "error") {
+                        toast.error("Notification access could not be checked. Try again.");
+                      }
                     }
                   }}
                 />
               </Row>
               <Row id="blink" title="Blink nudges" hint="A quiet reminder to blink fully">
-                <Switch id="blink" checked={settings.blinkNudges} onCheckedChange={(v) => onChange({ blinkNudges: v })} />
+                <Switch
+                  id="blink"
+                  checked={settings.blinkNudges}
+                  onCheckedChange={(v) => onChange({ blinkNudges: v })}
+                />
               </Row>
             </div>
+            {nativePlatform && notificationPermission === "denied" && (
+              <p role="status" className="mt-3 text-xs text-destructive">
+                Android notifications are blocked. Open Settings → Apps → Lookaway → Notifications
+                to allow reminders.
+              </p>
+            )}
+            {nativePlatform && notificationPermission === "default" && (
+              <p role="status" className="mt-3 text-xs text-muted-foreground">
+                Android permission is required for scheduled reminders. Battery-saving features may
+                delay delivery.
+              </p>
+            )}
+            {nativePlatform && notificationPermission === "error" && (
+              <p role="status" className="mt-3 text-xs text-destructive">
+                Android notification access could not be checked. Try enabling alerts again.
+              </p>
+            )}
             {settings.blinkNudges && (
               <div className="mt-4">
                 <SliderField

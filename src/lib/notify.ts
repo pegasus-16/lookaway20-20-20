@@ -1,6 +1,8 @@
+import { Capacitor } from "@capacitor/core";
+
 // Break reminders. Android only shows notifications that come from the service worker,
 // so try that first and fall back to a page notification (desktop, editor preview).
-export type ReminderResult = "worker" | "page" | "skipped" | "failed";
+export type ReminderResult = "native" | "worker" | "page" | "skipped" | "failed";
 
 const OPTIONS = {
   tag: "lookaway",
@@ -12,7 +14,9 @@ const OPTIONS = {
 } as NotificationOptions;
 
 export async function showReminder(title: string, body: string): Promise<ReminderResult> {
-  if (typeof Notification === "undefined" || Notification.permission !== "granted") return "skipped";
+  if (Capacitor.isNativePlatform()) return "native";
+  if (typeof Notification === "undefined" || Notification.permission !== "granted")
+    return "skipped";
   const options = { ...OPTIONS, body };
   try {
     if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
