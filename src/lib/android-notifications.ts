@@ -2,15 +2,20 @@ import { Capacitor } from "@capacitor/core";
 import { LocalNotifications, type LocalNotificationSchema } from "@capacitor/local-notifications";
 
 import type { EyeSettings, TimerState } from "./eye-timer";
-import { isPaused, remainingMs } from "./eye-timer";
+import { isPaused, remainingMs, formatSpan, focusMs } from "./eye-timer";
 
 export const TIMER_NOTIFICATION_ID = 20_2020;
+
+/** Created natively in NotificationChannels.java; the native service plays the alarm. */
+export const BREAK_CHANNEL_ID = "eye_breaks_v2";
 
 export function isAndroidApp(): boolean {
   return Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android";
 }
 
-export async function requestNativeNotificationPermission(): Promise<"granted" | "denied" | "prompt" | "unsupported"> {
+export async function requestNativeNotificationPermission(): Promise<
+  "granted" | "denied" | "prompt" | "unsupported"
+> {
   if (!isAndroidApp()) return "unsupported";
   try {
     const status = await LocalNotifications.checkPermissions();
@@ -60,6 +65,7 @@ export async function scheduleTimerReminder(
           title: "Time to look away",
           body: `Look at something 20 feet (6 m) away for ${settings.breakSeconds} seconds.`,
           schedule: { at, allowWhileIdle: true, repeats: false },
+          channelId: BREAK_CHANNEL_ID,
           isExactNotification: false,
           extra: { action: "break" },
           autoCancel: true,
@@ -67,8 +73,9 @@ export async function scheduleTimerReminder(
       : {
           id: TIMER_NOTIFICATION_ID,
           title: "Break complete",
-          body: `Next break in ${settings.focusMinutes} minutes.`,
+          body: `Next break in ${formatSpan(focusMs(settings))}.`,
           schedule: { at, allowWhileIdle: true, repeats: false },
+          channelId: BREAK_CHANNEL_ID,
           isExactNotification: false,
           extra: { action: "focus" },
           autoCancel: true,

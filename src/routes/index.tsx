@@ -1,9 +1,24 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { BarChart3, BookOpen, ChevronRight, Clock, Coffee, Pause, Play, RotateCcw, Settings2, Smartphone, Smile, Star, TimerReset } from "lucide-react";
+import {
+  BarChart3,
+  BookOpen,
+  ChevronRight,
+  Clock,
+  Coffee,
+  Pause,
+  Play,
+  RotateCcw,
+  Settings2,
+  Smartphone,
+  Smile,
+  Star,
+  TimerReset,
+} from "lucide-react";
 
 import { BlinkCue } from "@/components/eye/BlinkCue";
 import { BreakOverlay } from "@/components/eye/BreakOverlay";
+import { DebugPanel } from "@/components/eye/DebugPanel";
 import { EyeCareGuide } from "@/components/eye/EyeCareGuide";
 import { InsightsDialog } from "@/components/eye/InsightsDialog";
 import { InstallDialog, useInstallPrompt } from "@/components/eye/InstallDialog";
@@ -18,7 +33,15 @@ import { TimerRing } from "@/components/eye/TimerRing";
 import { WorkHoursDialog } from "@/components/eye/WorkHoursDialog";
 import { Button } from "@/components/ui/button";
 import { useEyeTimer } from "@/hooks/use-eye-timer";
-import { formatClock, formatDuration, formatTime12, isPaused, progress, workHoursSummary } from "@/lib/eye-timer";
+import { isAndroidApp } from "@/lib/android-notifications";
+import {
+  formatClock,
+  formatDuration,
+  formatTime12,
+  isPaused,
+  progress,
+  workHoursSummary,
+} from "@/lib/eye-timer";
 import { allowanceLeftMs, starsFor } from "@/lib/kids-mode";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +57,8 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Lookaway — 20-20-20 eye break reminder" },
       {
         property: "og:description",
-        content: "Every 20 minutes, look 20 feet away for 20 seconds. Rest tired eyes with gentle reminders.",
+        content:
+          "Every 20 minutes, look 20 feet away for 20 seconds. Rest tired eyes with gentle reminders.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -44,6 +68,24 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [workHoursOpen, setWorkHoursOpen] = useState(false);
+  const [soundOpen, setSoundOpen] = useState(false);
+  const [guideOpen, setGuideOpen] = useState(false);
+  const [insightsOpen, setInsightsOpen] = useState(false);
+  const [installOpen, setInstallOpen] = useState(false);
+  const [kidsOpen, setKidsOpen] = useState(false);
+  const [pinFor, setPinFor] = useState<null | { reason: string; then: () => void }>(null);
+  // Any sheet hides the timer, so a due break waits instead of starting behind it.
+  const breakBlocked =
+    settingsOpen ||
+    workHoursOpen ||
+    soundOpen ||
+    guideOpen ||
+    insightsOpen ||
+    installOpen ||
+    kidsOpen ||
+    pinFor !== null;
   const {
     settings,
     updateSettings,
@@ -63,16 +105,12 @@ function Index() {
     blinkCue,
     actions,
     askNotifications,
-  } = useEyeTimer();
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [workHoursOpen, setWorkHoursOpen] = useState(false);
-  const [soundOpen, setSoundOpen] = useState(false);
-  const [guideOpen, setGuideOpen] = useState(false);
-  const [insightsOpen, setInsightsOpen] = useState(false);
-  const [installOpen, setInstallOpen] = useState(false);
-  const [kidsOpen, setKidsOpen] = useState(false);
-  const [pinFor, setPinFor] = useState<null | { reason: string; then: () => void }>(null);
+    debug,
+  } = useEyeTimer({ breakBlocked });
   const install = useInstallPrompt();
+  // Install-to-home-screen is a browser feature; the packaged app is already installed.
+  const showInstall = !isAndroidApp();
+  const installTile = showInstall && !install.installed;
 
   // In Kids mode, protected actions ask for the parent PIN first.
   const guarded = (reason: string, then: () => void) => () =>
@@ -83,16 +121,23 @@ function Index() {
 
   const paused = isPaused(state);
   const idle = state.phase === "idle";
+  const due = state.phase === "break_due";
   const restSeconds = stats.breaks * settings.breakSeconds;
 
-  const label = idle ? formatClock(settings.focusMinutes * 60_000) : formatClock(remaining);
+  const label = idle
+    ? formatClock(settings.focusMinutes * 60_000)
+    : due
+      ? "00:00"
+      : formatClock(remaining);
   const caption = idle
     ? `of screen time, then a ${settings.breakSeconds}-second eye break`
-    : autoPaused
-      ? `resting until ${formatTime12(settings.workStart)}`
-      : paused
-        ? "paused"
-        : "until your next eye break";
+    : due
+      ? "screen time is up — start your eye break"
+      : autoPaused
+        ? `resting until ${formatTime12(settings.workStart)}`
+        : paused
+          ? "paused"
+          : "until your next eye break";
 
   return (
     <div className="min-h-screen">
@@ -108,7 +153,9 @@ function Index() {
 
       <main className="mx-auto flex max-w-md flex-col items-center gap-6 px-5 pb-16 pt-6 text-center">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">20 · 20 · 20 eye care</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">
+            20 · 20 · 20 eye care
+          </p>
           <h1 className="mt-2 text-3xl font-light leading-tight sm:text-4xl">
             Give your eyes <em className="text-primary">a little distance.</em>
           </h1>
@@ -116,12 +163,18 @@ function Index() {
 
         {kids.enabled && (
           <div className="flex w-full items-center gap-3 rounded-3xl bg-accent/20 p-4 text-left">
-            <span className="text-3xl" aria-hidden>🦉</span>
+            <span className="text-3xl" aria-hidden>
+              🦉
+            </span>
             <div className="flex-1">
-              <p className="font-display text-lg leading-tight">Kids mode · {formatDuration(kidsLeft)} left today</p>
+              <p className="font-display text-lg leading-tight">
+                Kids mode · {formatDuration(kidsLeft)} left today
+              </p>
               <p className="mt-1 flex gap-0.5" aria-label={`${stats.breaks} stars`}>
                 {stats.breaks === 0 ? (
-                  <span className="text-xs text-muted-foreground">Finish an eye break to earn a star!</span>
+                  <span className="text-xs text-muted-foreground">
+                    Finish an eye break to earn a star!
+                  </span>
                 ) : (
                   Array.from({ length: starsFor(stats.breaks) }, (_, i) => (
                     <Star key={i} className="h-4 w-4 fill-accent text-accent" />
@@ -146,7 +199,12 @@ function Index() {
               <Play /> Start screen time
             </Button>
           )}
-          {!idle && !paused && (
+          {due && (
+            <Button variant="hero" size="xl" onClick={actions.breakNow}>
+              <Coffee /> Start eye break
+            </Button>
+          )}
+          {!idle && !paused && !due && (
             <Button variant="hero" size="xl" onClick={actions.pause}>
               <Pause /> Pause
             </Button>
@@ -174,7 +232,9 @@ function Index() {
                   />
                 )}
               </span>
-              <span className="block truncate text-xs text-muted-foreground">{workHoursSummary(settings)}</span>
+              <span className="block truncate text-xs text-muted-foreground">
+                {workHoursSummary(settings)}
+              </span>
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>
@@ -186,7 +246,10 @@ function Index() {
               <Button variant="soft" onClick={actions.snooze}>
                 <TimerReset /> +5 min
               </Button>
-              <Button variant="soft" onClick={guarded("Enter the PIN to stop the timer.", actions.stop)}>
+              <Button
+                variant="soft"
+                onClick={guarded("Enter the PIN to stop the timer.", actions.stop)}
+              >
                 <RotateCcw /> Stop
               </Button>
             </div>
@@ -203,7 +266,10 @@ function Index() {
             {[
               { k: "Breaks today", v: stats.breaks },
               { k: "Skipped", v: stats.skipped },
-              { k: "Eyes rested", v: restSeconds >= 60 ? `${Math.floor(restSeconds / 60)}m` : `${restSeconds}s` },
+              {
+                k: "Eyes rested",
+                v: restSeconds >= 60 ? `${Math.floor(restSeconds / 60)}m` : `${restSeconds}s`,
+              },
             ].map((s) => (
               <div key={s.k} className="rounded-2xl border bg-card px-2 py-3">
                 <dd className="font-display tabular text-2xl font-light">{s.v}</dd>
@@ -216,15 +282,33 @@ function Index() {
 
           <HowItWorks />
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className={cn("grid gap-2", installTile ? "grid-cols-3" : "grid-cols-2")}>
             {[
-              { icon: <BarChart3 className="h-5 w-5" />, label: "Your week", onClick: () => setInsightsOpen(true) },
+              {
+                icon: <BarChart3 className="h-5 w-5" />,
+                label: "Your week",
+                onClick: () => setInsightsOpen(true),
+              },
               { icon: <Smile className="h-5 w-5" />, label: "Kids mode", onClick: openKids },
-              ...(install.installed ? [] : [{ icon: <Smartphone className="h-5 w-5" />, label: "Install app", onClick: () => setInstallOpen(true) }]),
+              ...(installTile
+                ? [
+                    {
+                      icon: <Smartphone className="h-5 w-5" />,
+                      label: "Install app",
+                      onClick: () => setInstallOpen(true),
+                    },
+                  ]
+                : []),
             ].map((b) => (
-              <button key={b.label} type="button" onClick={b.onClick}
-                className="flex flex-col items-center gap-1.5 rounded-2xl border bg-card px-2 py-3 text-xs font-semibold transition-colors hover:bg-muted">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-primary">{b.icon}</span>
+              <button
+                key={b.label}
+                type="button"
+                onClick={b.onClick}
+                className="flex flex-col items-center gap-1.5 rounded-2xl border bg-card px-2 py-3 text-xs font-semibold transition-colors hover:bg-muted"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-primary">
+                  {b.icon}
+                </span>
                 {b.label}
               </button>
             ))}
@@ -240,15 +324,26 @@ function Index() {
             </span>
             <span className="flex-1">
               <span className="block font-display text-xl">Eye-care tips</span>
-              <span className="block text-xs opacity-80">Backed by eye doctors and published research</span>
+              <span className="block text-xs opacity-80">
+                Backed by eye doctors and published research
+              </span>
             </span>
             <ChevronRight className="h-5 w-5 opacity-80" />
           </button>
+
+          {debug && (
+            <DebugPanel
+              onSeedStreak={debug.seedStreak}
+              onSeedToday={debug.seedToday}
+              onClear={debug.clearStats}
+            />
+          )}
         </div>
       </main>
 
       <footer className="mx-auto max-w-md px-5 pb-10 text-center text-xs text-muted-foreground">
-        A habit helper, not medical advice. If eye pain, headaches or blurry vision persist, see an eye doctor.
+        A habit helper, not medical advice. If eye pain, headaches or blurry vision persist, see an
+        eye doctor.
       </footer>
 
       <SettingsSheet
@@ -266,11 +361,25 @@ function Index() {
         settings={settings}
         onChange={updateSettings}
       />
-      <SoundDialog open={soundOpen} onOpenChange={setSoundOpen} settings={settings} onChange={updateSettings} />
+      <SoundDialog
+        open={soundOpen}
+        onOpenChange={setSoundOpen}
+        settings={settings}
+        onChange={updateSettings}
+      />
       <EyeCareGuide open={guideOpen} onOpenChange={setGuideOpen} />
       <InsightsDialog open={insightsOpen} onOpenChange={setInsightsOpen} insights={insights} />
-      <InstallDialog open={installOpen} onOpenChange={setInstallOpen} event={install.event} />
-      <KidsDialog open={kidsOpen} onOpenChange={setKidsOpen} kids={kids} onChange={updateKids} todayKey={todayKey} stats={stats} />
+      {showInstall && (
+        <InstallDialog open={installOpen} onOpenChange={setInstallOpen} event={install.event} />
+      )}
+      <KidsDialog
+        open={kidsOpen}
+        onOpenChange={setKidsOpen}
+        kids={kids}
+        onChange={updateKids}
+        todayKey={todayKey}
+        stats={stats}
+      />
       <PinDialog
         open={pinFor !== null}
         onOpenChange={(o) => !o && setPinFor(null)}
@@ -288,7 +397,9 @@ function Index() {
           kids={kids.enabled}
         />
       )}
-      {blinkCue && state.phase === "focus" && !timeUp && <BlinkCue onClose={actions.dismissBlink} />}
+      {blinkCue && state.phase === "focus" && !timeUp && (
+        <BlinkCue onClose={actions.dismissBlink} />
+      )}
     </div>
   );
 }

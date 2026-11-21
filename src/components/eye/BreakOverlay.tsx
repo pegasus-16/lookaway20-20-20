@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/button";
 
 import { BREAK_STEPS, KIDS_BREAK_GAMES, SOURCES } from "@/lib/eye-care-guide";
 
+// Warm the photograph while focus time is running so the overlay does not have
+// to decode it at the moment the phase changes.
+if (typeof window !== "undefined") {
+  const warm = new Image();
+  warm.src = horizon;
+}
+
 interface Props {
   secondsLeft: number;
   totalSeconds: number;
@@ -25,6 +32,8 @@ export function BreakOverlay({ secondsLeft, totalSeconds, onSkip, kids = false }
   const stepSource = step.sources.map((id) => SOURCES.find((s) => s.id === id)?.short).filter(Boolean).join(", ");
 
   const pct = Math.max(0, Math.min(100, (1 - secondsLeft / totalSeconds) * 100));
+  // The phase changes just after the deadline; hold on 1 instead of flashing 0.
+  const displaySeconds = Math.max(1, secondsLeft);
 
   return (
     <div
@@ -56,8 +65,8 @@ export function BreakOverlay({ secondsLeft, totalSeconds, onSkip, kids = false }
             className="absolute inset-0 rounded-full border border-night-foreground/30 animate-ripple"
             style={{ animationDelay: "2s" }}
           />
-          <span className="absolute inset-4 rounded-full bg-night-foreground/10 backdrop-blur-sm animate-breathe" />
-          <span className="relative font-display tabular text-7xl font-light">{secondsLeft}</span>
+          <span className="absolute inset-4 rounded-full bg-night-foreground/10 animate-breathe" />
+          <span className="relative font-display tabular text-7xl font-light">{displaySeconds}</span>
         </div>
 
         {kids ? (

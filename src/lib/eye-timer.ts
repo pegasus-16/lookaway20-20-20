@@ -1,7 +1,7 @@
 // Pure 20-20-20 timer logic. Time is always derived from timestamps so the
 // countdown stays correct even when the browser throttles background tabs.
 
-export type Phase = "idle" | "focus" | "break";
+export type Phase = "idle" | "focus" | "break" | "break_due";
 
 export type SoundKind = "chime" | "bowl" | "windchimes" | "kalimba" | "marimba";
 export const SOUND_KINDS: SoundKind[] = ["chime", "bowl", "windchimes", "kalimba", "marimba"];
@@ -61,7 +61,24 @@ export type TimerEvent = "break-start" | "break-end" | null;
 export const focusMs = (s: EyeSettings) => s.focusMinutes * 60_000;
 export const breakMs = (s: EyeSettings) => s.breakSeconds * 1_000;
 
-export const IDLE: TimerState = { phase: "idle", endsAt: null, pausedRemainingMs: null, durationMs: 0 };
+export const IDLE: TimerState = {
+  phase: "idle",
+  endsAt: null,
+  pausedRemainingMs: null,
+  durationMs: 0,
+};
+
+/**
+ * Focus time is over, but the break has not started. Breaks only begin when
+ * the user opens the app, so a backgrounded app can never run a break (and the
+ * next focus phase) without the user.
+ */
+export const BREAK_DUE: TimerState = {
+  phase: "break_due",
+  endsAt: null,
+  pausedRemainingMs: null,
+  durationMs: 0,
+};
 
 export function startFocus(settings: EyeSettings, now: number, ms = focusMs(settings)): TimerState {
   return { phase: "focus", endsAt: now + ms, pausedRemainingMs: null, durationMs: ms };
@@ -109,7 +126,12 @@ export function tick(
   settings: EyeSettings,
   now: number,
 ): { state: TimerState; event: TimerEvent } {
-  if (state.phase === "idle" || isPaused(state) || remainingMs(state, now) > 0) {
+  if (
+    state.phase === "idle" ||
+    state.phase === "break_due" ||
+    isPaused(state) ||
+    remainingMs(state, now) > 0
+  ) {
     return { state, event: null };
   }
   if (state.phase === "focus") return { state: startBreak(settings, now), event: "break-start" };
@@ -121,6 +143,14 @@ export function formatClock(ms: number): string {
   const m = Math.floor(total / 60);
   const s = total % 60;
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+/** Human phrase for a length of time, e.g. "20 seconds" or "20 minutes". */
+export function formatSpan(ms: number): string {
+  const seconds = Math.max(0, Math.round(ms / 1000));
+  if (seconds < 60) return `${seconds} second${seconds === 1 ? "" : "s"}`;
+  const minutes = Math.round(seconds / 60);
+  return `${minutes} minute${minutes === 1 ? "" : "s"}`;
 }
 
 export function dayKey(date: Date): string {
@@ -139,6 +169,16 @@ export interface DayStats {
 
 export const EMPTY_DAY: DayStats = { breaks: 0, skipped: 0, screenMs: 0 };
 
+/** Add one completed break or skip to a specific day. */
+export function addDayStat(
+  all: Record<string, DayStats>,
+  key: string,
+  field: "breaks" | "skipped",
+): Record<string, DayStats> {
+  const day = { ...EMPTY_DAY, ...all[key] };
+  return { ...all, [key]: { ...day, [field]: day[field] + 1 } };
+}
+
 /** How late a focus phase ended (e.g. the phone slept). 0 if on time or not running. */
 export function overdueMs(state: TimerState, now: number): number {
   if (state.phase === "idle" || state.endsAt === null) return 0;
@@ -152,7 +192,12 @@ export const MISSED_BREAK_GRACE_MS = 60_000;
  * Screen time to add for one heartbeat. Gaps longer than maxGapMs mean the page
  * was frozen or asleep, so they don't count.
  */
-export function screenTimeDelta(prev: number, now: number, counting: boolean, maxGapMs = 5_000): number {
+export function screenTimeDelta(
+  prev: number,
+  now: number,
+  counting: boolean,
+  maxGapMs = 5_000,
+): number {
   if (!counting) return 0;
   const d = now - prev;
   return d > 0 && d <= maxGapMs ? d : 0;
@@ -267,7 +312,9 @@ export function computeStreak(
   today: Date,
   isWorkDay: (d: Date) => boolean = () => true,
 ): Streak {
-  const keys = Object.keys(all).filter((k) => (all[k]?.breaks ?? 0) > 0).sort();
+  const keys = Object.keys(all)
+    .filter((k) => (all[k]?.breaks ?? 0) > 0)
+    .sort();
   if (keys.length === 0) return { current: 0, best: 0 };
   const todayKey = dayKey(today);
   const cursor = parseDayKey(keys[0]!);
@@ -356,6 +403,9 @@ const num = (x: unknown): x is number => typeof x === "number" && Number.isFinit
 function validState(s: unknown): s is TimerState {
   if (!s || typeof s !== "object") return false;
   const t = s as TimerState;
+  if (t.phase === "break_due") {
+    return t.endsAt === null && t.pausedRemainingMs === null;
+  }
   if (t.phase !== "focus" && t.phase !== "break") return false;
   if (!num(t.durationMs) || t.durationMs <= 0) return false;
   const running = num(t.endsAt) && t.pausedRemainingMs === null;

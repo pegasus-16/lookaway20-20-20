@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { workHoursSummary, type EyeSettings } from "@/lib/eye-timer";
+import { DEBUG_TOOLS_ENABLED } from "@/lib/debug";
 import { SOUNDS } from "@/lib/sounds";
 
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
   onOpenChange: (open: boolean) => void;
   settings: EyeSettings;
   onChange: (patch: Partial<EyeSettings>) => void;
-  askNotifications: () => Promise<NotificationPermission | "unsupported">;
+  askNotifications: () => Promise<NotificationPermission | "unsupported" | "prompt">;
   onOpenWorkHours: () => void;
   onOpenSound: () => void;
 }
@@ -122,24 +123,52 @@ export function SettingsSheet({
         <div className="mt-6 space-y-8 pb-6">
           <Group title="Timing">
             <div className="space-y-6">
-              <SliderField
-                label="Screen time before a break"
-                value={settings.focusMinutes}
-                suffix="min"
-                min={5}
-                max={60}
-                step={5}
-                onChange={(v) => onChange({ focusMinutes: v })}
-              />
-              <SliderField
-                label="Look-away time"
-                value={settings.breakSeconds}
-                suffix="sec"
-                min={20}
-                max={60}
-                step={5}
-                onChange={(v) => onChange({ breakSeconds: v })}
-              />
+              {DEBUG_TOOLS_ENABLED ? (
+                <>
+                  <SliderField
+                    label="Screen time before a break"
+                    value={Math.round(settings.focusMinutes * 60)}
+                    suffix="sec"
+                    min={10}
+                    max={60}
+                    step={5}
+                    onChange={(v) => onChange({ focusMinutes: v / 60 })}
+                  />
+                  <SliderField
+                    label="Look-away time"
+                    value={settings.breakSeconds}
+                    suffix="sec"
+                    min={5}
+                    max={30}
+                    step={5}
+                    onChange={(v) => onChange({ breakSeconds: v })}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Debug build: timing sliders use seconds so you can test the full cycle quickly.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <SliderField
+                    label="Screen time before a break"
+                    value={settings.focusMinutes}
+                    suffix="min"
+                    min={5}
+                    max={60}
+                    step={5}
+                    onChange={(v) => onChange({ focusMinutes: v })}
+                  />
+                  <SliderField
+                    label="Look-away time"
+                    value={settings.breakSeconds}
+                    suffix="sec"
+                    min={20}
+                    max={60}
+                    step={5}
+                    onChange={(v) => onChange({ breakSeconds: v })}
+                  />
+                </>
+              )}
             </div>
           </Group>
 
