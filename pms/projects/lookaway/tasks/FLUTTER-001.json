@@ -5,10 +5,10 @@
   "parent_task": null,
   "milestone": "FLUTTER-M0",
   "priority": "High",
-  "status": "Planned",
+  "status": "Blocked",
   "assignee": "Human or AI agent",
   "created_at": "2026-11-21T10:32:06Z",
-  "updated_at": "2026-11-21T10:32:06Z",
+  "updated_at": "2026-11-21T13:51:57Z",
   "dependencies": ["PMS-001"],
   "related_decisions": ["ADR-0005"],
   "files_affected": ["FLUTTER_REWRITE.md", "flutter_app/"],
@@ -21,8 +21,25 @@
     "Use the commands and outcomes in FLUTTER_REWRITE.md, adjusting only for the actual environment.",
     "Do not claim physical-device verification unless a named device is tested."
   ],
-  "verification_evidence": [],
+  "verification_evidence": [
+    "2026-11-21T13:51:57Z: Flutter 3.50.1 and Dart 3.14.0 were located and executed at /home/codespace/.flutter/flutter.",
+    "flutter pub get succeeded and resolved the scaffold dependencies.",
+    "dart format --output=none --set-exit-if-changed . formatted 3 Dart files with 0 changes.",
+    "flutter analyze succeeded with no issues found.",
+    "flutter test failed because the flutter_app/test directory does not exist.",
+    "flutter build apk --debug failed because no Android SDK is configured.",
+    "flutter doctor -v reported the Android SDK missing and also listed Chrome, Ninja, and GTK desktop prerequisites as unavailable.",
+    "No connected Android device or emulator was available; the only connected device reported by Flutter doctor was Linux desktop.",
+    "No application source or Android implementation file was modified."
+  ],
   "outstanding_issues": [
-    "Flutter, Dart, Android SDK, and adb are unavailable in the current audited environment."
+    "Flutter and Dart executables are installed outside PATH and must be added to PATH or invoked by absolute path.",
+    "No Android SDK is configured; ANDROID_HOME/ANDROID_SDK_ROOT and platform-tools are unavailable.",
+    "adb is unavailable.",
+    "No Flutter test directory or test files exist.",
+    "No Android physical device or emulator was available.",
+    "The scaffold still uses com.parth.lookaway as its applicationId rather than a documented separate debug/dev identifier.",
+    "Linux desktop build prerequisites Ninja and GTK 3 development libraries are unavailable, but Linux desktop is not required for the Android verification.",
+    "The machine uses JDK 25.0.5 and Gradle 9.8.2 system tools; Flutter's Android wrapper pins Gradle 9.5.0 and has not been verified because the Android SDK is missing."
   ]
 }

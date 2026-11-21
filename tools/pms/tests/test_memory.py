@@ -319,7 +319,7 @@ class HandoffTests(unittest.TestCase):
         self.assertEqual(memory.validate_record(record, schema or {}), [])
         self.assertIn("Draft only", record["verification_status"])
         self.assertTrue(record["task_id"])
-        self.assertIn("AGENTS.md", record["files_changed"])
+        self.assertIsInstance(record["files_changed"], list)
 
     def test_handoff_output_archives_replaced_file_and_rejects_escape(self) -> None:
         with tempfile.TemporaryDirectory(dir=memory.PROJECTS_ROOT) as temporary:

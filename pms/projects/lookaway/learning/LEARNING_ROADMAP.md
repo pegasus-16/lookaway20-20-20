@@ -42,3 +42,22 @@ code.
 After PMS v1, verify the Flutter environment and scaffold on an equipped
 machine. Then learn Dart through the first pure timer-engine task before
 building Flutter timer UI.
+
+FLUTTER-001 established the baseline but is blocked from full completion:
+
+1. Learn the shell/`PATH` concept only enough to invoke Flutter/Dart or add
+   the SDK to `PATH`.
+2. Learn Flutter project structure while adding the first small test.
+3. Learn Dart variables, types, functions, and null safety through timer
+   model values.
+4. Learn classes/enums with a timer phase or reminder sound model.
+5. Learn deterministic unit testing before introducing UI state.
+6. Learn `ChangeNotifier` or an existing Flutter state primitive only after
+   pure timer rules are testable.
+7. Learn widgets and layout through the smallest timer screen.
+8. Learn persistence after state behavior is stable.
+9. Learn Android platform channels, lifecycle, and notifications only after
+   the app-side timer behavior is established.
+
+Do not complete unrelated programming exercises; each concept above should be
+introduced by an implementation file or a focused test in a Lookaway task.

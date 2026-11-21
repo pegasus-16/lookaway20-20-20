@@ -1,7 +1,7 @@
 # Lookaway project state
 
-**Verified at:** 2026-11-21T11:43:04Z (PMS-003 correction verified; Flutter toolchain work remains planned)
-**Observed branch / commit:** `main` / `394de96`
+**Verified at:** 2026-11-21T13:54:28Z (FLUTTER-001 environment audit complete; Android and test verification blocked)
+**Observed branch / commit:** `main` / `1315c8a434c46de7aa05be871e0218416304c369`
 
 This is a maintained snapshot, not a replacement for source, test output, or
 Git. The statuses below are bounded to repository evidence inspected at the
@@ -24,9 +24,8 @@ time shown.
 - Flutter scaffold files exist. The sound-kind model and offline synthesizer
   exist, but `flutter_app/lib/main.dart` still renders a placeholder.
 - PMS v1 framework, project records, schemas, protocols, and Python utility are
-  present under `pms/` and `tools/pms/`. PMS-001 is implementation-tested, but
-  its final post-PMS-003 verification snapshot remains pending until the complete
-  suite and validation rerun succeed.
+  present under `pms/` and `tools/pms/`. PMS-001, PMS-002, and PMS-003 are Tested
+  and the final PMS suite/validation pass has been recorded.
 
 ## Tested
 
@@ -39,6 +38,10 @@ time shown.
   A pre-record reconciliation run passed 22 of 22 tests.
 - Final post-correction rerun passed **22 of 22 tests**.
 - Final PMS validation passed with **0 errors and 0 warnings**.
+- Flutter 3.50.1 / Dart 3.14.0 are installed under `/home/codespace/.flutter/flutter` but are not on PATH.
+- `flutter pub get` passed.
+- `dart format --output=none --set-exit-if-changed .` passed with 3 formatted files and 0 changes.
+- `flutter analyze` passed with no issues.
 - `PYTHONDONTWRITEBYTECODE=1 python3 tools/pms/memory.py validate` passed with
   zero errors and zero warnings after creation of the structured handoff.
 - CLI status, validate, handoff (Markdown and JSON), history, search, help,
@@ -55,6 +58,7 @@ time shown.
 - No physical-device verification was evidenced during the initial audit.
 - The migration plan names a CPH2487 target, but this is a plan, not a recorded
   device test.
+- No Android device or emulator was available during FLUTTER-001.
 
 ## Released
 
@@ -67,7 +71,7 @@ time shown.
   the full suite, validation, and handoff preparation are complete.
 - PMS-001 remains Tested for implementation evidence, not device verified or
   released.
-- FLUTTER-001 is Planned and remains the next Flutter task.
+- FLUTTER-001 is **Blocked** pending Android SDK/test setup and baseline rerun.
 
 ## Planned
 
@@ -77,15 +81,14 @@ time shown.
 
 ## Blocked
 
-- No confirmed project-level blocker. Flutter toolchain/device verification is
-  unavailable in the current environment; validate from an equipped machine
-  before claiming the scaffold builds.
+- Flutter toolchain is available outside PATH, but Android SDK/adb/device
+  verification is unavailable. The scaffold test directory is missing.
 
 ## Limitations and unknowns
 
 - `FLUTTER_REWRITE.md` names `flutter-rewrite`, whereas this checkout is
   `main`; actual Git state takes precedence.
-- Flutter/Dart/adb are not installed in the current environment.
+- Flutter/Dart are installed outside PATH; adb is unavailable.
 - App tests were not run during the initial audit; test results must be added
   only after execution.
 - Release/deployment state and physical-device results remain unknown.
