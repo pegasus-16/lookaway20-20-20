@@ -1,0 +1,34 @@
+{
+  "task_id": "PMS-002",
+  "title": "Independent final audit of PMS v1",
+  "description": "Independently audit PMS v1 architecture, project memory accuracy, ADR and task records, JSON/JSONL, Python utilities, preservation, and fresh-agent onboarding without modifying repository work.",
+  "parent_task": "PMS-001",
+  "milestone": "PMS-M2",
+  "priority": "High",
+  "status": "Tested",
+  "assignee": "Independent AI code reviewer",
+  "created_at": "2026-11-21T11:33:18Z",
+  "updated_at": "2026-11-21T11:39:56Z",
+  "dependencies": ["PMS-001"],
+  "related_decisions": ["ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004"],
+  "files_affected": [],
+  "acceptance_criteria": [
+    "Inspect exact Git baseline and complete worktree.",
+    "Audit PMS architecture, project-memory evidence, ADRs, tasks, JSON/JSONL, utilities, preservation, and onboarding.",
+    "Report critical issues without silently modifying implementation or historical records.",
+    "Distinguish independent findings from implementation-agent self-reporting."
+  ],
+  "test_requirements": [
+    "Run or inspect the PMS test suite and report actual outcomes.",
+    "Run validation and CLI commands where available.",
+    "Verify application-source and Lovable-managed-section preservation."
+  ],
+  "verification_evidence": [
+    "Independent audit found 17 of 18 PMS tests passing and one history test failure caused by state-dependent expectations.",
+    "The audit identified the active-task-index/FLUTTER-001 reconciliation as an audit interpretation issue, not an index implementation defect.",
+    "The audit confirmed no application-source changes and byte-for-byte preservation of the Lovable-managed AGENTS.md section."
+  ],
+  "outstanding_issues": [
+    "Correct the deterministic history test and retain PMS-001 status evidence until final PMS-003 verification."
+  ]
+}

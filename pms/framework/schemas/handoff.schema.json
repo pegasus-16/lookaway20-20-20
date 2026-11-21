@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PMS session handoff",
+  "type": "object",
+  "required": [
+    "project",
+    "task_id",
+    "generated_at",
+    "branch",
+    "commit",
+    "files_changed",
+    "uncommitted_changes",
+    "completed_work",
+    "tests",
+    "verification_status",
+    "unresolved_problems",
+    "outstanding_approvals",
+    "next_actions",
+    "relevant_documents"
+  ],
+  "properties": {
+    "project": { "type": "string", "minLength": 1 },
+    "task_id": { "type": ["string", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "branch": { "type": ["string", "null"] },
+    "commit": { "type": ["string", "null"] },
+    "files_changed": { "type": "array", "items": { "type": "string" } },
+    "uncommitted_changes": { "type": "array", "items": { "type": "string" } },
+    "completed_work": { "type": "array", "items": { "type": "string" } },
+    "tests": { "type": "array", "items": { "type": "object" } },
+    "verification_status": { "type": "string", "minLength": 1 },
+    "unresolved_problems": { "type": "array", "items": { "type": "string" } },
+    "outstanding_approvals": { "type": "array", "items": { "type": "string" } },
+    "next_actions": { "type": "array", "items": { "type": "string" } },
+    "relevant_documents": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,23 @@
+{
+  "decision_id": "ADR-0002",
+  "title": "Reusable PMS framework",
+  "date": "2026-11-21",
+  "status": "Accepted",
+  "decision_owner": "Human project owner",
+  "decision_origin": "Human-approved",
+  "context": "The project memory framework may be useful across future projects, including unrelated domains.",
+  "problem": "Avoid coupling reusable operating rules to one product or repository.",
+  "options_considered": [
+    "Separate reusable framework from project-specific records.",
+    "Combine all instructions and project facts into one Lookaway-specific memory."
+  ],
+  "decision": "Keep reusable PMS framework and project-specific memory logically separate; the framework remains project-agnostic.",
+  "rationale": "Separation permits reuse and extraction without carrying one project's product assumptions into another.",
+  "consequences": [
+    "Schemas, templates, and protocols use generic names and rules.",
+    "Lookaway decisions and architecture remain under its project memory."
+  ],
+  "related_requirements": ["PMS-AC-01", "PMS-AC-20"],
+  "related_tasks": ["PMS-001"],
+  "supersedes": null
+}

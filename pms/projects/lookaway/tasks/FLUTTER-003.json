@@ -1,0 +1,27 @@
+{
+  "task_id": "FLUTTER-003",
+  "title": "Build the Flutter UI shell on tested timer rules",
+  "description": "Create the first Flutter timer screen and supporting navigation/state presentation only after the pure timer engine is tested.",
+  "parent_task": null,
+  "milestone": "FLUTTER-M3",
+  "priority": "Medium",
+  "status": "Planned",
+  "assignee": "Human learner with AI agent support",
+  "created_at": "2026-11-21T10:45:43Z",
+  "updated_at": "2026-11-21T10:45:43Z",
+  "dependencies": ["FLUTTER-002"],
+  "related_decisions": ["ADR-0005"],
+  "files_affected": ["flutter_app/lib/"],
+  "acceptance_criteria": [
+    "Keep UI state/orchestration separate from pure timer rules.",
+    "Implement the initial timer presentation using existing project design evidence without changing the React/Capacitor application.",
+    "Add widget tests for core presentation and user actions.",
+    "Explain the Flutter widget/state concepts used and record unverified behavior."
+  ],
+  "test_requirements": [
+    "Run flutter analyze, flutter test, and a debug build after implementation.",
+    "Do not claim device verification without an identified device and test context."
+  ],
+  "verification_evidence": [],
+  "outstanding_issues": []
+}

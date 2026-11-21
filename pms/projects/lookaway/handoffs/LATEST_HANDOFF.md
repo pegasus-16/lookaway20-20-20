@@ -1,0 +1,175 @@
+# Session handoff
+
+- **Project:** Lookaway
+- **Task:** PMS-003
+- **Generated:** 2026-11-21T11:44:50Z
+- **Branch / commit:** `main` / `394de96d47380872a37fc49a4278f5c58075ea04`
+- **Approval state:** None recorded
+
+## Completed work
+
+- PMS-003 completed deterministic history testing, record reconciliation, and active-index semantics. PMS-001 and PMS-002 historical evidence remains intact.
+
+## Files and worktree
+
+### Changed files
+- AGENTS.md
+- pms/README.md
+- pms/framework/MEMORY_MODEL.md
+- pms/framework/README.md
+- pms/framework/SOURCE_OF_TRUTH.md
+- pms/framework/SPECIFICATION.md
+- pms/framework/protocols/AGENT_EXECUTION.md
+- pms/framework/protocols/AGENT_HANDOFF.md
+- pms/framework/protocols/AGENT_ONBOARDING.md
+- pms/framework/protocols/HUMAN_APPROVAL.md
+- pms/framework/protocols/MEMORY_UPDATE.md
+- pms/framework/schemas/activity.schema.json
+- pms/framework/schemas/decision.schema.json
+- pms/framework/schemas/handoff.schema.json
+- pms/framework/schemas/task.schema.json
+- pms/framework/templates/ADR_TEMPLATE.md
+- pms/framework/templates/CURRENT_FOCUS.md
+- pms/framework/templates/HANDOFF_TEMPLATE.md
+- pms/framework/templates/PROJECT_CONTEXT.md
+- pms/framework/templates/PROJECT_STATE.md
+- pms/framework/templates/SESSION_LOG_TEMPLATE.md
+- pms/framework/templates/TASK_TEMPLATE.md
+- pms/projects/lookaway/CURRENT_FOCUS.md
+- pms/projects/lookaway/ONBOARDING_VALIDATION.md
+- pms/projects/lookaway/PROJECT_CONTEXT.md
+- pms/projects/lookaway/PROJECT_STATE.md
+- pms/projects/lookaway/README.md
+- pms/projects/lookaway/architecture/ANDROID_ARCHITECTURE.md
+- pms/projects/lookaway/architecture/DATA_ARCHITECTURE.md
+- pms/projects/lookaway/architecture/FLUTTER_ARCHITECTURE.md
+- pms/projects/lookaway/architecture/SYSTEM_OVERVIEW.md
+- pms/projects/lookaway/decisions/ADR-0001.json
+- pms/projects/lookaway/decisions/ADR-0002.json
+- pms/projects/lookaway/decisions/ADR-0003.json
+- pms/projects/lookaway/decisions/ADR-0004.json
+- pms/projects/lookaway/decisions/ADR-0005.json
+- pms/projects/lookaway/decisions/INDEX.json
+- pms/projects/lookaway/decisions/README.md
+- pms/projects/lookaway/handoffs/LATEST_HANDOFF.md
+- pms/projects/lookaway/handoffs/PMS-001-20261121.json
+- pms/projects/lookaway/handoffs/PMS-003-20261121.json
+- pms/projects/lookaway/handoffs/archive/20261121T104056Z_LATEST_HANDOFF.md
+- pms/projects/lookaway/handoffs/archive/20261121T104230Z_LATEST_HANDOFF.md
+- pms/projects/lookaway/handoffs/archive/20261121T104230Z_PMS-001-20261121.json
+- pms/projects/lookaway/handoffs/archive/20261121T104816Z_LATEST_HANDOFF.md
+- pms/projects/lookaway/handoffs/archive/20261121T104816Z_PMS-001-20261121.json
+- pms/projects/lookaway/handoffs/archive/20261121T104854Z_LATEST_HANDOFF.md
+- pms/projects/lookaway/handoffs/archive/20261121T104854Z_PMS-001-20261121.json
+- pms/projects/lookaway/handoffs/archive/20261121T114344Z_LATEST_HANDOFF.md
+- pms/projects/lookaway/learning/CONCEPTS_LEARNED.md
+- pms/projects/lookaway/learning/LEARNING_ROADMAP.md
+- pms/projects/lookaway/learning/PMS_V1_LEARNING_NOTES.md
+- pms/projects/lookaway/requirements/FUNCTIONAL_REQUIREMENTS.md
+- pms/projects/lookaway/requirements/NON_FUNCTIONAL_REQUIREMENTS.md
+- pms/projects/lookaway/requirements/PRODUCT_REQUIREMENTS.md
+- pms/projects/lookaway/roadmap/MASTER_ROADMAP.md
+- pms/projects/lookaway/tasks/FLUTTER-001.json
+- pms/projects/lookaway/tasks/FLUTTER-002.json
+- pms/projects/lookaway/tasks/FLUTTER-003.json
+- pms/projects/lookaway/tasks/INDEX.json
+- pms/projects/lookaway/tasks/PMS-001.json
+- pms/projects/lookaway/tasks/PMS-002.json
+- pms/projects/lookaway/tasks/PMS-003.json
+- pms/projects/lookaway/tasks/README.md
+- tools/pms/memory.py
+- tools/pms/tests/test_memory.py
+
+### Uncommitted changes
+-  M AGENTS.md
+- ?? pms/README.md
+- ?? pms/framework/MEMORY_MODEL.md
+- ?? pms/framework/README.md
+- ?? pms/framework/SOURCE_OF_TRUTH.md
+- ?? pms/framework/SPECIFICATION.md
+- ?? pms/framework/protocols/AGENT_EXECUTION.md
+- ?? pms/framework/protocols/AGENT_HANDOFF.md
+- ?? pms/framework/protocols/AGENT_ONBOARDING.md
+- ?? pms/framework/protocols/HUMAN_APPROVAL.md
+- ?? pms/framework/protocols/MEMORY_UPDATE.md
+- ?? pms/framework/schemas/activity.schema.json
+- ?? pms/framework/schemas/decision.schema.json
+- ?? pms/framework/schemas/handoff.schema.json
+- ?? pms/framework/schemas/task.schema.json
+- ?? pms/framework/templates/ADR_TEMPLATE.md
+- ?? pms/framework/templates/CURRENT_FOCUS.md
+- ?? pms/framework/templates/HANDOFF_TEMPLATE.md
+- ?? pms/framework/templates/PROJECT_CONTEXT.md
+- ?? pms/framework/templates/PROJECT_STATE.md
+- ?? pms/framework/templates/SESSION_LOG_TEMPLATE.md
+- ?? pms/framework/templates/TASK_TEMPLATE.md
+- ?? pms/projects/lookaway/CURRENT_FOCUS.md
+- ?? pms/projects/lookaway/ONBOARDING_VALIDATION.md
+- ?? pms/projects/lookaway/PROJECT_CONTEXT.md
+- ?? pms/projects/lookaway/PROJECT_STATE.md
+- ?? pms/projects/lookaway/README.md
+- ?? pms/projects/lookaway/architecture/ANDROID_ARCHITECTURE.md
+- ?? pms/projects/lookaway/architecture/DATA_ARCHITECTURE.md
+- ?? pms/projects/lookaway/architecture/FLUTTER_ARCHITECTURE.md
+- ?? pms/projects/lookaway/architecture/SYSTEM_OVERVIEW.md
+- ?? pms/projects/lookaway/decisions/ADR-0001.json
+- ?? pms/projects/lookaway/decisions/ADR-0002.json
+- ?? pms/projects/lookaway/decisions/ADR-0003.json
+- ?? pms/projects/lookaway/decisions/ADR-0004.json
+- ?? pms/projects/lookaway/decisions/ADR-0005.json
+- ?? pms/projects/lookaway/decisions/INDEX.json
+- ?? pms/projects/lookaway/decisions/README.md
+- ?? pms/projects/lookaway/handoffs/LATEST_HANDOFF.md
+- ?? pms/projects/lookaway/handoffs/PMS-001-20261121.json
+- ?? pms/projects/lookaway/handoffs/PMS-003-20261121.json
+- ?? pms/projects/lookaway/handoffs/archive/20261121T104056Z_LATEST_HANDOFF.md
+- ?? pms/projects/lookaway/handoffs/archive/20261121T104230Z_LATEST_HANDOFF.md
+- ?? pms/projects/lookaway/handoffs/archive/20261121T104230Z_PMS-001-20261121.json
+- ?? pms/projects/lookaway/handoffs/archive/20261121T104816Z_LATEST_HANDOFF.md
+- ?? pms/projects/lookaway/handoffs/archive/20261121T104816Z_PMS-001-20261121.json
+- ?? pms/projects/lookaway/handoffs/archive/20261121T104854Z_LATEST_HANDOFF.md
+- ?? pms/projects/lookaway/handoffs/archive/20261121T104854Z_PMS-001-20261121.json
+- ?? pms/projects/lookaway/handoffs/archive/20261121T114344Z_LATEST_HANDOFF.md
+- ?? pms/projects/lookaway/learning/CONCEPTS_LEARNED.md
+- ?? pms/projects/lookaway/learning/LEARNING_ROADMAP.md
+- ?? pms/projects/lookaway/learning/PMS_V1_LEARNING_NOTES.md
+- ?? pms/projects/lookaway/requirements/FUNCTIONAL_REQUIREMENTS.md
+- ?? pms/projects/lookaway/requirements/NON_FUNCTIONAL_REQUIREMENTS.md
+- ?? pms/projects/lookaway/requirements/PRODUCT_REQUIREMENTS.md
+- ?? pms/projects/lookaway/roadmap/MASTER_ROADMAP.md
+- ?? pms/projects/lookaway/tasks/FLUTTER-001.json
+- ?? pms/projects/lookaway/tasks/FLUTTER-002.json
+- ?? pms/projects/lookaway/tasks/FLUTTER-003.json
+- ?? pms/projects/lookaway/tasks/INDEX.json
+- ?? pms/projects/lookaway/tasks/PMS-001.json
+- ?? pms/projects/lookaway/tasks/PMS-002.json
+- ?? pms/projects/lookaway/tasks/PMS-003.json
+- ?? pms/projects/lookaway/tasks/README.md
+- ?? tools/pms/memory.py
+- ?? tools/pms/tests/test_memory.py
+
+## Verification
+
+- Draft only. Generated from maintained task/activity records and current Git status. No new tests were run by this command; unrecorded behavior is unverified.
+- PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/pms/tests -v: test_passed — Final PMS-003 verification passed all 22 Python unit and CLI tests. [agent-reported]
+- PYTHONDONTWRITEBYTECODE=1 python3 tools/pms/memory.py validate: test_passed — Final PMS memory validation passed with zero errors and zero warnings. [agent-reported]
+- PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/pms/tests -v: test_passed — The corrected PMS suite passed 22 tests in a pre-record reconciliation run. [agent-reported]
+
+## Unresolved problems
+
+- None recorded
+
+## Next actions
+
+- On a Flutter-equipped machine, record Flutter/Dart/JDK/Android SDK versions and run `flutter pub get`, `flutter analyze`, `flutter test`, and a debug APK build; then begin FLUTTER-002.
+
+## Relevant documents
+
+- AGENTS.md
+- pms/README.md
+- pms/framework/protocols/AGENT_ONBOARDING.md
+- pms/projects/lookaway/PROJECT_CONTEXT.md
+- pms/projects/lookaway/PROJECT_STATE.md
+- pms/projects/lookaway/CURRENT_FOCUS.md
+- pms/projects/lookaway/handoffs/LATEST_HANDOFF.md
+- pms/projects/lookaway/tasks/PMS-003.json

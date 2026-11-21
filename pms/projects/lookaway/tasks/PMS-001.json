@@ -1,0 +1,42 @@
+{
+  "task_id": "PMS-001",
+  "title": "Design and implement Project Memory System v1",
+  "description": "Implement a reusable repository-native PMS framework and evidence-based Lookaway project memory, then validate the structure, records, utilities, onboarding, and handoff.",
+  "parent_task": null,
+  "milestone": "PMS-M2",
+  "priority": "High",
+  "status": "Tested",
+  "assignee": "AI agent with human project owner authority",
+  "created_at": "2026-11-21T10:32:06Z",
+  "updated_at": "2026-11-21T11:43:04Z",
+  "dependencies": [],
+  "related_decisions": ["ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004", "ADR-0005"],
+  "files_affected": ["AGENTS.md", "pms/", "tools/pms/"],
+  "acceptance_criteria": [
+    "Separate reusable PMS framework from Lookaway-specific memory.",
+    "Document project context, verified state, architecture, requirements, roadmap, and learning plan.",
+    "Create accepted initial ADRs and indexed task records.",
+    "Implement offline JSON/JSONL validation and status, handoff, history, and search CLI commands.",
+    "Test schemas, negative cases, CLI behavior, non-destructive validation, fresh-agent onboarding, and recovery.",
+    "Preserve Lovable-managed AGENTS.md content and do not modify application implementation or dependency manifests."
+  ],
+  "test_requirements": [
+    "Run Python standard-library unit tests for valid and invalid records, references, IDs, timestamps, indexes, handoff output/archive, and CLI commands.",
+    "Run memory validation and confirm it does not modify project files.",
+    "Attempt fresh-agent reconstruction from onboarding documentation without prior conversation context."
+  ],
+  "verification_evidence": [
+    "At 2026-11-21T10:40:40Z, initial implementation testing passed 18 of 18 PMS tests.",
+    "PYTHONDONTWRITEBYTECODE=1 python3 tools/pms/memory.py validate — passed with 0 errors and 0 warnings.",
+    "PMS-002 independently reran the suite and found 17 passes and 1 failure in the history test, which depended on the accumulated real repository history.",
+    "PMS-003 replaced the brittle assertion with controlled history fixtures and, in a pre-record reconciliation run, passed all 22 tests.",
+    "Final post-correction verification at 2026-11-21T11:43:04Z passed 22 of 22 PMS tests and PMS validation reported 0 errors and 0 warnings.",
+    "CLI tests execute status, validate, handoff, history, search, help, unsafe path rejection, and archive replacement from outside the repository working directory.",
+    "Validation non-destructive test confirms selected project files retain identical contents and modification times.",
+    "A separate fresh agent with no prior conversation reconstructed the project from repository onboarding instructions and identified two memory inconsistencies, which were reconciled."
+  ],
+  "outstanding_issues": [
+    "Flutter/Dart/adb are not installed in the current environment; Flutter scaffold build/device verification is out of scope and remains pending.",
+    "PMS-001 is not device verified or released; the remaining limitations are environment-specific Flutter and Android verification."
+  ]
+}

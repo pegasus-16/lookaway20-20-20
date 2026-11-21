@@ -1,0 +1,24 @@
+{
+  "decision_id": "ADR-0001",
+  "title": "Repository-native PMS",
+  "date": "2026-11-21",
+  "status": "Accepted",
+  "decision_owner": "Human project owner",
+  "decision_origin": "Human-approved",
+  "context": "PMS must preserve project knowledge across agents without an external service dependency.",
+  "problem": "Choose v1 memory storage and tooling that remain portable, inspectable, and usable offline.",
+  "options_considered": [
+    "Markdown, JSON, JSONL, Python, and Git in the repository.",
+    "External database, hosted memory service, or vector search."
+  ],
+  "decision": "Use repository-native Markdown, JSON, JSONL, Python, and Git exclusively for PMS v1. External storage and semantic search are not v1 dependencies.",
+  "rationale": "These formats are human-readable, versionable, low-cost, portable, and available without a network service.",
+  "consequences": [
+    "Records and validation live in the repository.",
+    "Users remain responsible for ordinary Git backup and review.",
+    "Search is local text search; no semantic retrieval is promised."
+  ],
+  "related_requirements": ["PMS-AC-01", "PMS-AC-06", "PMS-AC-11"],
+  "related_tasks": ["PMS-001"],
+  "supersedes": null
+}

@@ -1,0 +1,9 @@
+{
+  "decisions": [
+    { "decision_id": "ADR-0001", "status": "Accepted", "file": "ADR-0001.json" },
+    { "decision_id": "ADR-0002", "status": "Accepted", "file": "ADR-0002.json" },
+    { "decision_id": "ADR-0003", "status": "Accepted", "file": "ADR-0003.json" },
+    { "decision_id": "ADR-0004", "status": "Accepted", "file": "ADR-0004.json" },
+    { "decision_id": "ADR-0005", "status": "Accepted", "file": "ADR-0005.json" }
+  ]
+}

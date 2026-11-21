@@ -52,3 +52,10 @@ use the editor.
 - The manifest never declares Bluetooth, Wi-Fi nearby or UWB permissions; explicit `tools:node="remove"` entries keep them out if a dependency tries to merge them in. Why: Lookaway has no nearby-device features and must not ask for that permission group.
 - Debug timings and the Debug tools card are gated by `DEBUG_TOOLS_ENABLED` (`src/lib/debug.ts`), which is false outside development builds. Why: fast test timings must never ship.
 - Data is offline-first: localStorage is the source of truth; any future cloud sync must be optional and merge into it. Why: the app must keep working with no internet or account.
+
+## Project Memory System
+
+- Before implementation, read [`pms/README.md`](pms/README.md), the onboarding protocol, project context/state/focus, and the latest handoff; inspect the actual Git branch and worktree.
+- Identify the active task, read its acceptance criteria and dependencies, and review relevant accepted ADRs. Follow the human approval boundaries in `pms/framework/protocols/HUMAN_APPROVAL.md`.
+- Keep task status evidence-based. Never fabricate completion, approval, test results, device verification, or release status.
+- After substantial work, update the task and relevant project state, append activity/session records, record actual test commands and outcomes, validate memory, and create a handoff. Preserve historical JSONL records; do not log secrets.

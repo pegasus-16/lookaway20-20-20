@@ -1,0 +1,23 @@
+{
+  "decision_id": "ADR-0003",
+  "title": "Multi-agent compatibility",
+  "date": "2026-11-21",
+  "status": "Accepted",
+  "decision_owner": "Human project owner",
+  "decision_origin": "Human-approved",
+  "context": "Project work may move among different AI providers, IDEs, or coding agents.",
+  "problem": "Avoid relying on a provider-only feature or automatic discovery behavior.",
+  "options_considered": [
+    "Provider-independent repository protocol with optional instruction-file links.",
+    "Require one agent's proprietary memory or instruction mechanism."
+  ],
+  "decision": "Define a common repository onboarding/execution/handoff protocol; provider-specific integrations are optional convenience links.",
+  "rationale": "Markdown and repository evidence are inspectable by humans and diverse agents.",
+  "consequences": [
+    "New agents must follow explicit onboarding rather than assume conversation history.",
+    "No claim of tested compatibility with every provider is made."
+  ],
+  "related_requirements": ["PMS-AC-07", "PMS-AC-08", "PMS-AC-20"],
+  "related_tasks": ["PMS-001"],
+  "supersedes": null
+}

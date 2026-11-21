@@ -1,0 +1,23 @@
+{
+  "decision_id": "ADR-0004",
+  "title": "Human approval authority",
+  "date": "2026-11-21",
+  "status": "Accepted",
+  "decision_owner": "Human project owner",
+  "decision_origin": "Human-approved",
+  "context": "Agents can propose and implement work but do not own product or release decisions.",
+  "problem": "Make authority and approval boundaries explicit and auditable.",
+  "options_considered": [
+    "Human retains final authority over major and consequential decisions.",
+    "Allow agents to silently change approved decisions or perform consequential work."
+  ],
+  "decision": "The human project owner retains final authority over requirements, major architecture, security-sensitive changes, data migration, destructive operations, releases, and changes to accepted decisions.",
+  "rationale": "Consequential product and operational decisions require explicit human control.",
+  "consequences": [
+    "Agents may propose decisions but must label them Proposed until explicitly approved.",
+    "Ordinary reversible implementation within an approved task does not require repeated approval."
+  ],
+  "related_requirements": ["PR-006", "PMS-AC-09"],
+  "related_tasks": ["PMS-001"],
+  "supersedes": null
+}

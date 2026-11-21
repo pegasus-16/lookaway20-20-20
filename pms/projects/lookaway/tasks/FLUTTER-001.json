@@ -1,0 +1,28 @@
+{
+  "task_id": "FLUTTER-001",
+  "title": "Verify Flutter scaffold and development toolchain",
+  "description": "On an equipped development machine, verify the Flutter/Dart versions and Android toolchain, run scaffold analysis/tests/build, and document actual outcomes before beginning timer implementation.",
+  "parent_task": null,
+  "milestone": "FLUTTER-M0",
+  "priority": "High",
+  "status": "Planned",
+  "assignee": "Human or AI agent",
+  "created_at": "2026-11-21T10:32:06Z",
+  "updated_at": "2026-11-21T10:32:06Z",
+  "dependencies": ["PMS-001"],
+  "related_decisions": ["ADR-0005"],
+  "files_affected": ["FLUTTER_REWRITE.md", "flutter_app/"],
+  "acceptance_criteria": [
+    "Record actual Flutter, Dart, JDK, and Android SDK versions.",
+    "Run flutter pub get, flutter analyze, flutter test, and a debug Android build where tooling allows.",
+    "Record limitations and confirm the existing React/Capacitor app remains unchanged."
+  ],
+  "test_requirements": [
+    "Use the commands and outcomes in FLUTTER_REWRITE.md, adjusting only for the actual environment.",
+    "Do not claim physical-device verification unless a named device is tested."
+  ],
+  "verification_evidence": [],
+  "outstanding_issues": [
+    "Flutter, Dart, Android SDK, and adb are unavailable in the current audited environment."
+  ]
+}

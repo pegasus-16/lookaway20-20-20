@@ -1,0 +1,28 @@
+{
+  "task_id": "FLUTTER-002",
+  "title": "Learn Dart through the pure timer engine",
+  "description": "After verifying the Flutter environment, learn core Dart concepts by implementing and testing pure Lookaway timer rules before introducing Flutter UI or Android service behavior.",
+  "parent_task": null,
+  "milestone": "FLUTTER-M1/FLUTTER-M2",
+  "priority": "High",
+  "status": "Planned",
+  "assignee": "Human learner with AI agent support",
+  "created_at": "2026-11-21T10:45:43Z",
+  "updated_at": "2026-11-21T10:45:43Z",
+  "dependencies": ["FLUTTER-001"],
+  "related_decisions": ["ADR-0005"],
+  "files_affected": ["flutter_app/lib/src/timer/", "flutter_app/test/"],
+  "acceptance_criteria": [
+    "Explain Dart values, types, functions, collections, null safety, and enums used in the timer implementation.",
+    "Implement timer transitions as UI-independent Dart logic with timestamp-derived countdown behavior.",
+    "Add focused tests for focus expiry, break completion, pause/resume, and due-break behavior.",
+    "Compare behavior with the existing TypeScript timer and document differences or unverified assumptions.",
+    "Record learner practice separately from agent implementation; do not claim mastery without learner demonstration."
+  ],
+  "test_requirements": [
+    "Run flutter analyze and flutter test in flutter_app after FLUTTER-001 establishes the toolchain.",
+    "Do not claim Android device verification for pure unit tests."
+  ],
+  "verification_evidence": [],
+  "outstanding_issues": []
+}

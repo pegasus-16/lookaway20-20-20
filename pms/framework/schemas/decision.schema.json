@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PMS architecture decision",
+  "type": "object",
+  "required": [
+    "decision_id",
+    "title",
+    "date",
+    "status",
+    "decision_owner",
+    "decision_origin",
+    "context",
+    "problem",
+    "options_considered",
+    "decision",
+    "rationale",
+    "consequences",
+    "related_requirements",
+    "related_tasks",
+    "supersedes"
+  ],
+  "properties": {
+    "decision_id": { "type": "string", "pattern": "^ADR-[0-9]{4,}$" },
+    "title": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "format": "date" },
+    "status": { "type": "string", "enum": ["Proposed", "Accepted", "Rejected", "Superseded", "Deprecated"] },
+    "decision_owner": { "type": "string", "minLength": 1 },
+    "decision_origin": {
+      "type": "string",
+      "enum": ["Human-approved", "Agent-proposed", "Agent-implemented-under-approval", "System-generated", "Inferred-from-existing-implementation"]
+    },
+    "context": { "type": "string", "minLength": 1 },
+    "problem": { "type": "string", "minLength": 1 },
+    "options_considered": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "decision": { "type": "string", "minLength": 1 },
+    "rationale": { "type": "string", "minLength": 1 },
+    "consequences": { "type": "array", "items": { "type": "string" } },
+    "related_requirements": { "type": "array", "items": { "type": "string" } },
+    "related_tasks": { "type": "array", "items": { "type": "string" } },
+    "supersedes": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

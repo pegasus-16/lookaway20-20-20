@@ -1,0 +1,36 @@
+{
+  "task_id": "PMS-003",
+  "title": "Correct PMS-002 audit findings and verify PMS v1",
+  "description": "Replace the state-dependent history test with controlled fixtures, reconcile PMS records and the active-task index semantics, append audit/correction evidence, and run complete final verification.",
+  "parent_task": "PMS-001",
+  "milestone": "PMS-M2",
+  "priority": "Critical",
+  "status": "Tested",
+  "assignee": "AI agent with human project owner authority",
+  "created_at": "2026-11-21T11:39:11Z",
+  "updated_at": "2026-11-21T11:43:04Z",
+  "dependencies": ["PMS-001", "PMS-002"],
+  "related_decisions": ["ADR-0001", "ADR-0002", "ADR-0003", "ADR-0004"],
+  "files_affected": ["tools/pms/tests/test_memory.py", "pms/projects/lookaway/", "pms/projects/lookaway/logs/"],
+  "acceptance_criteria": [
+    "History test coverage is deterministic and independent of accumulated repository events.",
+    "Chronological ordering, limits, unrelated event types, and empty history are tested.",
+    "PMS-001 status and evidence distinguish initial testing, PMS-002 failure, PMS-003 correction, and final verification.",
+    "The active-task index matches validator conventions and current focus without promoting a Planned task.",
+    "The full PMS suite and validation pass with zero errors and warnings.",
+    "Application source, Lovable-managed instructions, and Git history remain unchanged."
+  ],
+  "test_requirements": [
+    "Run PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/pms/tests -v.",
+    "Run PYTHONDONTWRITEBYTECODE=1 python3 tools/pms/memory.py validate.",
+    "Run status, history, search, and handoff-path checks.",
+    "Verify the suite from repository and external-working-directory contexts."
+  ],
+  "verification_evidence": [
+    "At 2026-11-21T11:39:56Z the corrected suite ran 22 tests and passed before record reconciliation.",
+    "PMS-002 independently observed the original 17-pass/1-fail result in this repository.",
+    "Final suite rerun passed 22 of 22 tests.",
+    "Final PMS validation passed with 0 errors and 0 warnings."
+  ],
+  "outstanding_issues": []
+}

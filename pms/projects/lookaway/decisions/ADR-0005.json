@@ -1,0 +1,23 @@
+{
+  "decision_id": "ADR-0005",
+  "title": "Preserve existing production application during Flutter rewrite",
+  "date": "2026-11-21",
+  "status": "Accepted",
+  "decision_owner": "Human project owner",
+  "decision_origin": "Human-approved",
+  "context": "A Flutter rewrite has begun while the repository contains an existing React/Capacitor application.",
+  "problem": "Prevent migration work from prematurely replacing or damaging existing application functionality.",
+  "options_considered": [
+    "Develop Flutter independently while keeping React/Capacitor intact.",
+    "Replace the existing application during early migration work."
+  ],
+  "decision": "Keep the existing production application intact and functional while Flutter is developed independently. Replacement requires separate human approval after readiness and migration evidence.",
+  "rationale": "The owner explicitly requires preservation during migration; no Flutter parity or release evidence exists in the scaffold.",
+  "consequences": [
+    "Do not modify legacy application implementation as part of PMS.",
+    "Flutter milestones must distinguish scaffold, implementation, testing, device verification, and release."
+  ],
+  "related_requirements": ["PR-004", "FR-009", "PMS-AC-16"],
+  "related_tasks": ["PMS-001", "FLUTTER-001", "FLUTTER-002", "FLUTTER-003"],
+  "supersedes": null
+}
