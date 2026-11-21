@@ -1,7 +1,7 @@
 # Lookaway project state
 
-**Verified at:** 2026-11-21T13:54:28Z (FLUTTER-001 environment audit complete; Android and test verification blocked)
-**Observed branch / commit:** `main` / `1315c8a434c46de7aa05be871e0218416304c369`
+**Verified at:** 2026-11-21T14:22:47Z (FLUTTER-001 and FLUTTER-001B definitive build/test verification complete)
+**Observed branch / commit:** `main` / `8b155771768160d1439601ee537ee772f85f8e38`
 
 This is a maintained snapshot, not a replacement for source, test output, or
 Git. The statuses below are bounded to repository evidence inspected at the
@@ -38,10 +38,13 @@ time shown.
   A pre-record reconciliation run passed 22 of 22 tests.
 - Final post-correction rerun passed **22 of 22 tests**.
 - Final PMS validation passed with **0 errors and 0 warnings**.
-- Flutter 3.50.1 / Dart 3.14.0 are installed under `/home/codespace/.flutter/flutter` but are not on PATH.
+- Flutter 3.50.1 / Dart 3.14.0 are installed under `/home/codespace/.flutter/flutter` and are available in a new login shell.
+- Android SDK 36.0.0, build-tools 36.0.0, platform-tools 37.0.3, NDK 28.2.13676358, platform 35, and CMake 3.22.1 are installed at `/home/codespace/android-sdk`.
 - `flutter pub get` passed.
-- `dart format --output=none --set-exit-if-changed .` passed with 3 formatted files and 0 changes.
+- `dart format --output=none --set-exit-if-changed .` passed with 4 Dart files and 0 changes.
 - `flutter analyze` passed with no issues.
+- One placeholder widget test exists and `flutter test` passed.
+- `flutter build apk --debug` produced `flutter_app/build/app/outputs/flutter-apk/app-debug.apk`.
 - `PYTHONDONTWRITEBYTECODE=1 python3 tools/pms/memory.py validate` passed with
   zero errors and zero warnings after creation of the structured handoff.
 - CLI status, validate, handoff (Markdown and JSON), history, search, help,
@@ -58,7 +61,8 @@ time shown.
 - No physical-device verification was evidenced during the initial audit.
 - The migration plan names a CPH2487 target, but this is a plan, not a recorded
   device test.
-- No Android device or emulator was available during FLUTTER-001.
+- No Android device or emulator was available during FLUTTER-001B; `adb devices`
+  showed no runtime targets.
 
 ## Released
 
@@ -67,29 +71,30 @@ time shown.
 
 ## In progress
 
+- No implementation task is currently In progress.
 - PMS-003 is **Tested**: deterministic history coverage, record reconciliation,
   the full suite, validation, and handoff preparation are complete.
 - PMS-001 remains Tested for implementation evidence, not device verified or
   released.
-- FLUTTER-001 is **Blocked** pending Android SDK/test setup and baseline rerun.
+- FLUTTER-001 is **Tested** for toolchain, test, and APK-build verification.
+- FLUTTER-001B is **Tested** for environment setup and scaffold build verification.
 
 ## Planned
 
-- **FLUTTER-M0 / FLUTTER-001:** verify Flutter scaffold and toolchain in a
-  suitable development environment.
+- **FLUTTER-M1 / FLUTTER-002:** learn Dart through a pure, tested timer engine.
+- FLUTTER-002 is authorized to begin after separate implementation work starts.
 - Subsequent Flutter milestones are plans only; see `roadmap/MASTER_ROADMAP.md`.
 
 ## Blocked
 
-- Flutter toolchain is available outside PATH, but Android SDK/adb/device
-  verification is unavailable. The scaffold test directory is missing.
+- Android build verification is complete. Runtime/device verification remains
+  unavailable because no physical device or emulator is attached.
 
 ## Limitations and unknowns
 
 - `FLUTTER_REWRITE.md` names `flutter-rewrite`, whereas this checkout is
   `main`; actual Git state takes precedence.
-- Flutter/Dart are installed outside PATH; adb is unavailable.
-- App tests were not run during the initial audit; test results must be added
-  only after execution.
+- Chrome and Linux desktop build prerequisites remain unavailable, but they are not
+  required for Android build verification.
 - Release/deployment state and physical-device results remain unknown.
 - PMS-001 is tested but is not device verified or released.

@@ -39,11 +39,11 @@ code.
 
 ## Current learning priority
 
-After PMS v1, verify the Flutter environment and scaffold on an equipped
-machine. Then learn Dart through the first pure timer-engine task before
-building Flutter timer UI.
+After PMS v1, FLUTTER-001 and FLUTTER-001B established and verified the
+Flutter/Android build environment. The next learning and implementation work
+is FLUTTER-002: pure Dart timer rules before Flutter UI or Android integration.
 
-FLUTTER-001 established the baseline but is blocked from full completion:
+FLUTTER-001B demonstrated:
 
 1. Learn the shell/`PATH` concept only enough to invoke Flutter/Dart or add
    the SDK to `PATH`.

@@ -17,8 +17,8 @@ evidence; roadmap intent is not a verification claim.
 
 | Milestone | Scope | Status |
 | --- | --- | --- |
-| FLUTTER-M0 | Verify Flutter scaffold, SDK/toolchain, and build environment | Scaffold and Dart analyzer baseline verified; tests/build blocked by missing test directory and Android SDK |
-| FLUTTER-M1 | Beginner Dart fundamentals through a small, tested timer-rules task | Planned |
+| FLUTTER-M0 | Verify Flutter scaffold, SDK/toolchain, and build environment | Tested: Flutter/Dart PATH, Android SDK, analysis, widget test, and debug APK verification passed |
+| FLUTTER-M1 | Beginner Dart fundamentals through a small, tested timer-rules task | Authorized next task: FLUTTER-002 |
 | FLUTTER-M2 | Pure timer engine with tests and timestamp-derived countdown | Planned |
 | FLUTTER-M3 | Flutter UI shell and state/controller architecture | Planned |
 | FLUTTER-M4 | Local persistence, settings, statistics, and explicit migration design | Planned |

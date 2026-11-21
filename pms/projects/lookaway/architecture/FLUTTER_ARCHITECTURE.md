@@ -11,22 +11,26 @@ the migration document.
 
 ## FLUTTER-001 verification result
 
-On 2026-11-21, the environment audit found:
+On 2026-11-21, FLUTTER-001 and FLUTTER-001B found and verified:
 
 - Flutter 3.50.1 and Dart 3.14.0 installed at
-  `/home/codespace/.flutter/flutter`, but neither executable is on `PATH`.
+  `/home/codespace/.flutter/flutter`, and both are now available in a new login shell.
 - `flutter pub get` resolved dependencies successfully.
-- Dart formatting checked all three Dart files with zero changes.
+- Dart formatting checked all four Dart files with zero changes.
 - `flutter analyze` found no issues.
-- `flutter test` failed because `flutter_app/test/` does not exist.
-- `flutter build apk --debug` failed because no Android SDK is configured.
-- Flutter Doctor found the Android SDK missing; Chrome and Linux desktop
-  build prerequisites are also absent.
+- A focused placeholder widget test now exists and `flutter test` passed.
+- `flutter build apk --debug` passed and produced
+  `flutter_app/build/app/outputs/flutter-apk/app-debug.apk`.
+- Flutter Doctor recognizes Android SDK 36.0.0; Chrome and Linux desktop
+  build prerequisites remain absent.
 - The only connected Flutter device was Linux desktop; no Android device or
   emulator was available.
-- JDK 25.0.5 is installed and Gradle 9.8.2 is available system-wide. The
+- JDK 25.0.5.0.2 is installed and Gradle 9.8.2 is available system-wide. The
   generated Android wrapper uses Gradle 9.5.0 and Android plugin 9.3.1, but
-  Android SDK verification remains blocked.
+  both were used successfully in the debug APK build.
+- Android SDK packages include platform 36, build-tools 36.0.0, platform-tools
+  37.0.3, NDK 28.2.13676358, platform 35, and CMake 3.22.1 at
+  `/home/codespace/android-sdk`.
 
 No timer, UI, persistence, notification, or native integration feature was
 implemented during this verification task.

@@ -5,10 +5,10 @@
   "parent_task": null,
   "milestone": "FLUTTER-M0",
   "priority": "High",
-  "status": "Blocked",
+  "status": "Tested",
   "assignee": "Human or AI agent",
   "created_at": "2026-11-21T10:32:06Z",
-  "updated_at": "2026-11-21T13:51:57Z",
+  "updated_at": "2026-11-21T14:22:47Z",
   "dependencies": ["PMS-001"],
   "related_decisions": ["ADR-0005"],
   "files_affected": ["FLUTTER_REWRITE.md", "flutter_app/"],
@@ -30,16 +30,21 @@
     "flutter build apk --debug failed because no Android SDK is configured.",
     "flutter doctor -v reported the Android SDK missing and also listed Chrome, Ninja, and GTK desktop prerequisites as unavailable.",
     "No connected Android device or emulator was available; the only connected device reported by Flutter doctor was Linux desktop.",
-    "No application source or Android implementation file was modified."
+    "No application source or Android implementation file was modified.",
+    "2026-11-21T14:18:30Z: Flutter 3.50.1 and Dart 3.14.0 are accessible by PATH in a new login shell.",
+    "Android SDK command-line tools 23.0, Android platform 36, build-tools 36.0.0, platform-tools 37.0.3, NDK 28.2.13676358, platform 35, and CMake 3.22.1 are installed at /home/codespace/android-sdk.",
+    "The Android SDK licenses were displayed and accepted after explicit owner confirmation.",
+    "The Gradle 9.5.0 wrapper was generated and successfully executed with JDK 25.0.5.0.2.",
+    "flutter pub get, dart format, flutter analyze, and flutter test all passed.",
+    "flutter build apk --debug passed and produced flutter_app/build/app/outputs/flutter-apk/app-debug.apk.",
+    "No Android device or emulator was available; adb devices reported no devices.",
+    "flutter doctor -v recognizes the Android toolchain and reports only missing Chrome and Linux desktop prerequisites outside the Android task scope.",
+    "Definitive 2026-11-21T14:22:47Z rerun passed pub get, formatting, analysis, test, and debug APK build."
   ],
   "outstanding_issues": [
-    "Flutter and Dart executables are installed outside PATH and must be added to PATH or invoked by absolute path.",
-    "No Android SDK is configured; ANDROID_HOME/ANDROID_SDK_ROOT and platform-tools are unavailable.",
-    "adb is unavailable.",
-    "No Flutter test directory or test files exist.",
     "No Android physical device or emulator was available.",
-    "The scaffold still uses com.parth.lookaway as its applicationId rather than a documented separate debug/dev identifier.",
     "Linux desktop build prerequisites Ninja and GTK 3 development libraries are unavailable, but Linux desktop is not required for the Android verification.",
-    "The machine uses JDK 25.0.5 and Gradle 9.8.2 system tools; Flutter's Android wrapper pins Gradle 9.5.0 and has not been verified because the Android SDK is missing."
+    "Chrome is unavailable, but Chrome is not required for the Android verification.",
+    "The Flutter scaffold still uses com.parth.lookaway as its applicationId rather than a documented separate debug/dev identifier."
   ]
 }

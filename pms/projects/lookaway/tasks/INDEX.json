@@ -3,12 +3,13 @@
     { "task_id": "PMS-001", "status": "Tested", "file": "PMS-001.json" },
     { "task_id": "PMS-002", "status": "Tested", "file": "PMS-002.json" },
     { "task_id": "PMS-003", "status": "Tested", "file": "PMS-003.json" },
-    { "task_id": "FLUTTER-001", "status": "Blocked", "file": "FLUTTER-001.json" },
+    { "task_id": "FLUTTER-001", "status": "Tested", "file": "FLUTTER-001.json" },
+    { "task_id": "FLUTTER-001B", "status": "Tested", "file": "FLUTTER-001B.json" },
     { "task_id": "FLUTTER-002", "status": "Planned", "file": "FLUTTER-002.json" },
     { "task_id": "FLUTTER-003", "status": "Planned", "file": "FLUTTER-003.json" }
   ],
   "active_task_ids": [],
-  "active_task_semantics": "active_task_ids contains In progress or Implemented tasks under this validator. FLUTTER-001 is Planned and is the current focus, not an active implementation task.",
-  "blocked_task_ids": ["FLUTTER-001"],
-  "completed_task_ids": ["PMS-001", "PMS-002", "PMS-003"]
+  "active_task_semantics": "active_task_ids contains In progress or Implemented tasks under this validator. FLUTTER-002 is Planned and is the next recommended task.",
+  "blocked_task_ids": [],
+  "completed_task_ids": ["FLUTTER-001", "FLUTTER-001B", "PMS-001", "PMS-002", "PMS-003"]
 }

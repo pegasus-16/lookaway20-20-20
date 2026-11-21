@@ -14,7 +14,8 @@ Current records:
 - **PMS-001** — PMS v1 foundation and validation (Tested; not device-verified or released).
 - **PMS-002** — Independent PMS v1 audit (Tested; its report recorded the PMS-003 correction).
 - **PMS-003** — Correct PMS-002 findings and complete verification (Tested).
-- **FLUTTER-001** — Verify the Flutter scaffold/toolchain (Blocked: Android SDK, test directory, and Android device/build verification remain missing).
+- **FLUTTER-001** — Verify the Flutter scaffold/toolchain (Tested; Android build and test verification passed, but device verification remains unavailable).
+- **FLUTTER-001B** — Configure Android SDK, Flutter PATH, test infrastructure, and verify the debug APK (Tested; no runtime device verification).
 - **FLUTTER-002** — Learn Dart through pure timer rules (depends on FLUTTER-001).
 - **FLUTTER-003** — Build a Flutter UI shell on tested timer rules (depends on FLUTTER-002).
 

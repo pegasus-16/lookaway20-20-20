@@ -1,0 +1,60 @@
+{
+  "task_id": "FLUTTER-001B",
+  "title": "Configure Android SDK, Flutter toolchain, and verify debug build",
+  "description": "Configure the verified Flutter SDK and official Android SDK command-line tools, establish PATH and environment settings, add a focused placeholder widget test, and rerun the scaffold formatting, analysis, test, and debug APK checks without changing product features.",
+  "parent_task": "FLUTTER-001",
+  "milestone": "FLUTTER-M0",
+  "priority": "Critical",
+  "status": "Tested",
+  "assignee": "AI agent with human approval required only for license acceptance or consequential build decisions",
+  "created_at": "2026-11-21T14:06:28Z",
+  "updated_at": "2026-11-21T14:22:47Z",
+  "dependencies": ["FLUTTER-001"],
+  "related_decisions": ["ADR-0005"],
+  "files_affected": [
+    "flutter_app/test/",
+    ".bashrc",
+    "pms/projects/lookaway/tasks/",
+    "pms/projects/lookaway/logs/"
+  ],
+  "acceptance_criteria": [
+    "Flutter and Dart are available through PATH in a new shell.",
+    "The Android SDK is configured at a persistent user-owned location and sdkmanager reports packages.",
+    "platform-tools including adb are installed.",
+    "Compile SDK and build-tools versions are derived from Flutter 3.50.1 and the Android project configuration.",
+    "Java/Gradle/AGP/Kotlin compatibility is verified from wrapper and build diagnostics.",
+    "A focused existing-placeholder widget test exists and passes.",
+    "Flutter pub get, Dart formatting, Flutter analysis, Flutter test, and debug APK build complete or have exact diagnosed blockers.",
+    "No React, Android production, Flutter product feature, application ID, package, dependency, or signing configuration is changed."
+  ],
+  "test_requirements": [
+    "Run flutter --version and dart --version.",
+    "Run flutter doctor -v.",
+    "Run flutter pub get in flutter_app.",
+    "Run dart format --output=none --set-exit-if-changed . in flutter_app.",
+    "Run flutter analyze in flutter_app.",
+    "Run flutter test in flutter_app.",
+    "Run flutter build apk --debug in flutter_app.",
+    "Verify java -version, adb version, sdkmanager package list, and adb devices.",
+    "Record physical-device verification only if an actual device or emulator is available."
+  ],
+  "verification_evidence": [
+    "Flutter and Dart are available through PATH in a new login shell.",
+    "Official Android command-line tools and packages are installed at /home/codespace/android-sdk.",
+    "platform-tools 37.0.3 provides adb 1.0.41.",
+    "flutter doctor -v recognizes Android SDK 36.0.0 and JDK 25.0.5.0.2.",
+    "The project Gradle wrapper 9.5.0 and generated wrapper scripts successfully completed the debug build.",
+    "flutter pub get exited 0.",
+    "dart format --output=none --set-exit-if-changed . exited 0 with 4 files formatted and 0 changes.",
+    "flutter analyze exited 0 with no issues.",
+    "flutter test exited 0 with 1 placeholder widget test passing.",
+    "flutter build apk --debug exited 0 and produced a 156 MB app-debug.apk.",
+    "Definitive 2026-11-21T14:22:47Z rerun passed pub get, formatting, analysis, test, and debug APK build.",
+    "adb devices reported no physical or emulator devices.",
+    "No React, Android production, Flutter product feature, application ID, dependency, or signing configuration was changed."
+  ],
+  "outstanding_issues": [
+    "No physical Android device or emulator was available for runtime verification.",
+    "Chrome and Linux desktop prerequisites remain unavailable outside this Android task."
+  ]
+}

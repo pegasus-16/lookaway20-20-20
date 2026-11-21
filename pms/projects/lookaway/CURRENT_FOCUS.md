@@ -2,15 +2,17 @@
 
 - **Priority:** Verify the Flutter scaffold and development environment, then begin the project-driven Dart timer-engine work.
 - **Active milestone:** FLUTTER-M0 — scaffold and toolchain verification.
-- **Active task:** FLUTTER-001 — verify Flutter scaffold and development toolchain (Blocked).
+- **Priority:** Begin the Flutter timer-engine learning and implementation work through FLUTTER-002.
+- **Active milestone:** FLUTTER-M1 / FLUTTER-M2 — Dart foundations and pure timer engine.
+- **Active task:** FLUTTER-002 — learn Dart through a pure, tested timer engine (Planned).
 - **Observed branch:** `main` (recheck Git before work; branch in old migration docs is stale here).
-- **Blockers:** Flutter and Dart are installed but outside PATH; the Android SDK, adb, test directory, and Android device/emulator are unavailable.
-- **Outstanding approval:** None recorded for FLUTTER-001. Any production replacement, migration, or release still requires explicit human approval.
-- **Next action:** On a machine with Flutter configured for Android, add Flutter/Dart to PATH, install/configure Android SDK platform and build-tools, add adb, add a focused Flutter test directory, rerun the baseline commands, and then re-check the build. Keep FLUTTER-002 blocked until this task is verified.
+- **Blockers:** No Android physical device or emulator is attached. Chrome and Linux desktop prerequisites are also unavailable, but neither is required for this Android build.
+- **Outstanding approval:** None recorded for FLUTTER-002. Any production replacement, migration, or release still requires explicit human approval.
+- **Next action:** FLUTTER-002 may begin after a human or agent authorizes implementation. Start with Dart fundamentals and pure timer rules before UI or Android work.
 - **PMS-003 status:** Complete and Tested. The history test is deterministic and PMS validation passes with zero errors/warnings.
-- **FLUTTER-001 environment verification:** Flutter 3.50.1/Dart 3.14.0 found, dependency resolution and analysis pass, formatting is clean. Tests and Android build are unverified because no test directory/Android SDK exists.
-- **Task-index semantics:** `active_task_ids` contains only In progress or Implemented tasks. FLUTTER-001 is Blocked and is not an implementation-active task.
-- **Updated:** 2026-11-21T13:51:57Z
+- **FLUTTER-001 environment verification:** Flutter 3.50.1/Dart 3.14.0 are on PATH. Android SDK 36.0.0, build-tools, adb, NDK, formatting, analysis, a widget test, and a debug APK have been verified.
+- **Task-index semantics:** `active_task_ids` is empty because no task is In progress or Implemented. FLUTTER-002 is Planned and is now the next recommended work.
+- **Updated:** 2026-11-21T14:22:47Z
 
 This focus document is a snapshot. Check the actual branch, task record, and
 Git status before acting.

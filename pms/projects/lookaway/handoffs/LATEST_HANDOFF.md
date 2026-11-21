@@ -1,80 +1,63 @@
 # Session handoff
 
 - **Project:** Lookaway
-- **Task:** FLUTTER-001
-- **Generated:** 2026-11-21T13:56:07Z
-- **Branch / commit:** `main` / `1315c8a434c46de7aa05be871e0218416304c369`
+- **Task:** FLUTTER-001B
+- **Generated:** 2026-11-21T14:24:56Z
+- **Branch / commit:** `main` / `8b155771768160d1439601ee537ee772f85f8e38`
 - **Approval state:** None recorded
 
 ## Completed work
 
-- Updated .gitignore with narrow exceptions for PMS project activity and agent-session JSONL files while retaining ordinary repository log ignores.
+- None recorded
 
 ## Files and worktree
 
 ### Changed files
-- .gitignore
+- pms/framework/schemas/task.schema.json
 - pms/projects/lookaway/CURRENT_FOCUS.md
 - pms/projects/lookaway/PROJECT_STATE.md
 - pms/projects/lookaway/architecture/FLUTTER_ARCHITECTURE.md
-- pms/projects/lookaway/handoffs/LATEST_HANDOFF.md
 - pms/projects/lookaway/learning/LEARNING_ROADMAP.md
+- pms/projects/lookaway/logs/activity.jsonl
+- pms/projects/lookaway/logs/agent_sessions.jsonl
 - pms/projects/lookaway/roadmap/MASTER_ROADMAP.md
 - pms/projects/lookaway/tasks/FLUTTER-001.json
 - pms/projects/lookaway/tasks/INDEX.json
 - pms/projects/lookaway/tasks/README.md
-- tools/pms/tests/test_memory.py
-- pms/projects/lookaway/handoffs/FLUTTER-001-20261121.json
-- pms/projects/lookaway/handoffs/archive/20261121T135329Z_LATEST_HANDOFF.md
-- pms/projects/lookaway/handoffs/archive/20261121T135355Z_FLUTTER-001-20261121.json
-- pms/projects/lookaway/handoffs/archive/20261121T135355Z_LATEST_HANDOFF.md
-- pms/projects/lookaway/handoffs/archive/20261121T135446Z_FLUTTER-001-20261121.json
-- pms/projects/lookaway/handoffs/archive/20261121T135446Z_LATEST_HANDOFF.md
-- pms/projects/lookaway/logs/activity.jsonl
-- pms/projects/lookaway/logs/agent_sessions.jsonl
+- flutter_app/test/widget_test.dart
+- pms/projects/lookaway/tasks/FLUTTER-001B.json
 
 ### Uncommitted changes
--  M .gitignore
+-  M pms/framework/schemas/task.schema.json
 -  M pms/projects/lookaway/CURRENT_FOCUS.md
 -  M pms/projects/lookaway/PROJECT_STATE.md
 -  M pms/projects/lookaway/architecture/FLUTTER_ARCHITECTURE.md
--  M pms/projects/lookaway/handoffs/LATEST_HANDOFF.md
 -  M pms/projects/lookaway/learning/LEARNING_ROADMAP.md
+-  M pms/projects/lookaway/logs/activity.jsonl
+-  M pms/projects/lookaway/logs/agent_sessions.jsonl
 -  M pms/projects/lookaway/roadmap/MASTER_ROADMAP.md
 -  M pms/projects/lookaway/tasks/FLUTTER-001.json
 -  M pms/projects/lookaway/tasks/INDEX.json
 -  M pms/projects/lookaway/tasks/README.md
--  M tools/pms/tests/test_memory.py
-- ?? pms/projects/lookaway/handoffs/FLUTTER-001-20261121.json
-- ?? pms/projects/lookaway/handoffs/archive/20261121T135329Z_LATEST_HANDOFF.md
-- ?? pms/projects/lookaway/handoffs/archive/20261121T135355Z_FLUTTER-001-20261121.json
-- ?? pms/projects/lookaway/handoffs/archive/20261121T135355Z_LATEST_HANDOFF.md
-- ?? pms/projects/lookaway/handoffs/archive/20261121T135446Z_FLUTTER-001-20261121.json
-- ?? pms/projects/lookaway/handoffs/archive/20261121T135446Z_LATEST_HANDOFF.md
-- ?? pms/projects/lookaway/logs/activity.jsonl
-- ?? pms/projects/lookaway/logs/agent_sessions.jsonl
+- ?? flutter_app/test/widget_test.dart
+- ?? pms/projects/lookaway/tasks/FLUTTER-001B.json
 
 ## Verification
 
 - Draft only. Generated from maintained task/activity records and current Git status. No new tests were run by this command; unrecorded behavior is unverified.
-- cd flutter_app && /home/codespace/.flutter/flutter/bin/flutter test: test_failed — flutter test could not run because flutter_app/test/ does not exist; this is a missing scaffold test suite, not a failing application test. [agent-reported]
-- cd flutter_app && /home/codespace/.flutter/flutter/bin/flutter build apk --debug: test_failed — flutter build apk --debug could not run because no Android SDK is configured. [agent-reported]
-- cd flutter_app && /home/codespace/.flutter/flutter/bin/flutter pub get && /home/codespace/.flutter/flutter/bin/dart format --output=none --set-exit-if-changed . && /home/codespace/.flutter/flutter/bin/flutter analyze: test_passed — Flutter pub get resolved dependencies successfully; Dart formatting checked 3 files with zero changes; flutter analyze found no issues. [agent-reported]
+- flutter pub get && dart format --output=none --set-exit-if-changed . && flutter analyze && flutter test && flutter build apk --debug: test_passed — Definitive Flutter verification passed pub get, formatting, analysis, one widget test, and debug APK build. [agent-reported]
+- PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/pms/tests -v && PYTHONDONTWRITEBYTECODE=1 python3 tools/pms/memory.py validate: test_passed — Final PMS suite passed 22 tests and PMS validation passed with zero errors and zero warnings. [agent-reported]
+- flutter pub get && dart format --output=none --set-exit-if-changed . && flutter analyze && flutter test: test_passed — Flutter pub get, Dart formatting, Flutter analysis, and the placeholder widget test passed; pub get and all static checks exited 0. [agent-reported]
+- flutter build apk --debug: test_passed — Flutter debug APK build passed and produced the 156 MB app-debug.apk. [agent-reported]
 
 ## Unresolved problems
 
-- Flutter and Dart executables are installed outside PATH and must be added to PATH or invoked by absolute path.
-- No Android SDK is configured; ANDROID_HOME/ANDROID_SDK_ROOT and platform-tools are unavailable.
-- adb is unavailable.
-- No Flutter test directory or test files exist.
-- No Android physical device or emulator was available.
-- The scaffold still uses com.parth.lookaway as its applicationId rather than a documented separate debug/dev identifier.
-- Linux desktop build prerequisites Ninja and GTK 3 development libraries are unavailable, but Linux desktop is not required for the Android verification.
-- The machine uses JDK 25.0.5 and Gradle 9.8.2 system tools; Flutter's Android wrapper pins Gradle 9.5.0 and has not been verified because the Android SDK is missing.
+- No physical Android device or emulator was available for runtime verification.
+- Chrome and Linux desktop prerequisites remain unavailable outside this Android task.
 
 ## Next actions
 
-- On a machine with Flutter configured for Android, add Flutter/Dart to PATH, install/configure Android SDK platform and build-tools, add adb, add a focused Flutter test directory, rerun the baseline commands, and then re-check the build. Keep FLUTTER-002 blocked until this task is verified.
+- FLUTTER-002 may begin after a human or agent authorizes implementation. Start with Dart fundamentals and pure timer rules before UI or Android work.
 
 ## Relevant documents
 
@@ -85,4 +68,4 @@
 - pms/projects/lookaway/PROJECT_STATE.md
 - pms/projects/lookaway/CURRENT_FOCUS.md
 - pms/projects/lookaway/handoffs/LATEST_HANDOFF.md
-- pms/projects/lookaway/tasks/FLUTTER-001.json
+- pms/projects/lookaway/tasks/FLUTTER-001B.json
